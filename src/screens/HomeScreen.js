@@ -84,7 +84,7 @@ export default function HomeScreen(props){
                                 </Text>
                             }
                             <Text style={styles.text}>
-                                This is a text view
+                                This is a text view - Liana
                             </Text>                                
                         </View>
                     </ScrollView>
