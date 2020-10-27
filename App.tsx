@@ -9,6 +9,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen'
+import NewSessionScreen from './src/screens/NewSessionScreen'
+import SessionDetailsScreen from './src/screens/SessionDetailsScreen'
 import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
 import { AuthContext } from "./context";
@@ -38,7 +40,7 @@ export const Loading = () => (
 
 export default function App(){
     const [isLoading, setIsLoading] = React.useState(false);
-    const [user, setUser] = React.useState("");
+    const [user, setUser] = React.useState("asdf");
 
     React.useEffect(() => {
       console.log("in useEffect----------------")
@@ -53,7 +55,7 @@ export default function App(){
         <StatusBar style="auto" />
         <NavigationContainer>
         {isLoading ? <Loading/> 
-          : user ? <Drawer></Drawer>
+          : user ? <Drawer/>
           : <AuthStack/>
         }
         </NavigationContainer>
@@ -103,6 +105,8 @@ function HomeStack() {
         headerShown: false
       }}>
       <HomeStackNav.Screen name="Home" component={HomeScreen} />
+      <HomeStackNav.Screen name="NewSession" component={NewSessionScreen} />
+      <HomeStackNav.Screen name="SessionDetails" component={SessionDetailsScreen} />
     </HomeStackNav.Navigator>
   );
 }

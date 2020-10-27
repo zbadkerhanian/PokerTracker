@@ -7,7 +7,8 @@ import {
     Platform,
     SafeAreaView,
     ScrollView,
-    Dimensions
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { CollapsibleHeaderScrollView } from 'react-native-collapsible-header-views';
@@ -58,7 +59,7 @@ export default function HomeScreen(props){
                                 type='font-awesome'
                                 color='#C2185B'
                                 underlayColor= '#282828'
-                                onPress={() => props.navigation.navigate('Account')} />
+                                onPress={() => console.log("do nothing")} />
                         }
         
                         containerStyle={{
@@ -75,17 +76,33 @@ export default function HomeScreen(props){
             >
             
             
-            <SafeAreaView>
+                <SafeAreaView>
                     <ScrollView scrollEventThrottle={16}>
                         <View>
                             {user && 
-                                <Text style={{fontSize: 24, fontWeight: '700', color: 'white', flex:1, marginLeft: 10}}>
-                                    Hello {user.name}!
-                                </Text>
+                                <View>
+                                    <Text style={styles.textAlt}>
+                                        Hello {user.name}!
+                                    </Text>
+                                
+                                    <Text style={styles.text}>
+                                        This is a text view - Liana
+                                    </Text>      
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => props.navigation.navigate('NewSession')}
+                                    >
+                                        <Text style={styles.text} >New Session</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => props.navigation.navigate('SessionDetails')}
+                                    >
+                                        <Text style={styles.text} >Session Details</Text>
+                                    </TouchableOpacity>
+                                </View>
                             }
-                            <Text style={styles.text}>
-                                This is a text view - Liana
-                            </Text>                                
                         </View>
                     </ScrollView>
                 </SafeAreaView>
@@ -104,14 +121,29 @@ const styles = StyleSheet.create({
         height: 500
     },
     text: {
-        color: 'white',
+        color: 'black',
         fontSize: 20,
         margin: 20
+    },
+    textAlt: {
+        fontSize: 24, 
+        fontWeight: '700', 
+        color: 'black', 
+        flex:1, 
+        marginLeft: 10
+    },
+    button: {
+        alignItems: "center",
+        backgroundColor: "#DDDDDD",
+        padding: 10,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        color: "red"
     },
     title: { 
         fontSize: 24, 
         fontWeight: '700', 
-        color: 'white'
+        color: 'black'
     },
     placeContainer: {
         width:width-40,
