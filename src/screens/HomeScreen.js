@@ -81,13 +81,11 @@ export default function HomeScreen(props){
                         <View>
                             {user && 
                                 <View>
-                                    <Text style={styles.textAlt}>
+                                   <Text style={styles.textAlt}>
                                         Hello {user.name}!
-                                    </Text>
-                                
-                                    <Text style={styles.text}>
-                                        This is a text view - Liana
-                                    </Text>      
+                                    </Text> 
+                            
+
                                     <TouchableOpacity
                                         style={styles.button}
                                         onPress={() => props.navigation.navigate('NewSession')}
@@ -95,12 +93,88 @@ export default function HomeScreen(props){
                                         <Text style={styles.text} >New Session</Text>
                                     </TouchableOpacity>
 
+                                    <Text style={styles.text} >History</Text>
+
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => props.navigation.navigate('SessionDetails')}
-                                    >
-                                        <Text style={styles.text} >Session Details</Text>
+                                        onPress={()=>{
+                                           props.navigation.navigate('SessionDetails', 
+                                                {   
+                                                    gameType: 'No Limit Hold\'em',
+                                                    startTime: '10/15/20  11:00 AM',
+                                                    endTime: '10/15/20  1:00 PM',
+                                                    buyIn: '- $100',
+                                                    cashOut: '+ $200'
+                                                    });
+                                            }
+                                       }
+                                    >   
+                                        
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >Aria</Text>
+                                            <Text style={styles.textLeft} >10/5/20</Text>
+                                        </View>
+
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >No Limit Hold'em</Text>
+                                            <Text style={styles.textLeft} >+ $200</Text>
+                                        </View>
+                                         
                                     </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={()=>{
+                                            props.navigation.navigate('SessionDetails', 
+                                                 {   
+                                                     gameType: 'PLO Omaha',
+                                                     startTime: '9/27/20  11:35 PM',
+                                                     endTime: '9/28/20  1:00 AM',
+                                                     buyIn: '- $100',
+                                                     cashOut: '- $150'
+                                                     });
+                                             }
+                                        }
+                                    >   
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >Bellagio</Text>
+                                            <Text style={styles.textLeft} >9/27/20</Text>
+                                        </View>
+
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >PLO Omaha</Text>
+                                            <Text style={styles.textLeft} >- $150</Text>
+                                        </View>
+                                         
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={()=>{
+                                            props.navigation.navigate('SessionDetails', 
+                                                 {   
+                                                     gameType: 'Limit Hold\'em',
+                                                     startTime: '9/10/20  5:00 PM',
+                                                     endTime: '9/10/20  8:00 PM',
+                                                     buyIn: '- $50',
+                                                     cashOut: '- $150'
+                                                     });
+                                             }
+                                        }
+                                        
+                                    >   
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >Caesar's Palace</Text>
+                                            <Text style={styles.textLeft} >9/10/20</Text>
+                                        </View>
+
+                                        <View style={styles.row}>
+                                            <Text style={styles.text} >Limit Hold'em</Text>
+                                            <Text style={styles.textLeft} >+ $67</Text>
+                                        </View>
+                                 
+                                    </TouchableOpacity>
+                                    
                                 </View>
                             }
                         </View>
@@ -120,25 +194,38 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         height: 500
     },
+    row: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
     text: {
+        flex: 1,
         color: 'black',
         fontSize: 20,
-        margin: 20
+        margin: 20, 
+    },
+    textLeft: {
+        color: 'black',
+        fontSize: 20,
+        margin: 20,
     },
     textAlt: {
         fontSize: 24, 
         fontWeight: '700', 
         color: 'black', 
         flex:1, 
-        marginLeft: 10
+        marginLeft: 10,
+        margin: 20
     },
     button: {
-        alignItems: "center",
+        alignItems: "flex-start",
         backgroundColor: "#DDDDDD",
         padding: 10,
         marginHorizontal: 20,
         marginBottom: 20,
-        color: "red"
+        color: "red",
+        margin: 20
     },
     title: { 
         fontSize: 24, 
