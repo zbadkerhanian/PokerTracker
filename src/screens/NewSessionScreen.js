@@ -20,6 +20,7 @@ import { Header } from 'react-native-elements';
 import Constants from 'expo-constants';
 import { AuthContext } from '../../context';
 import { TouchableOpacityComponent } from 'react-native';
+import { setTextRange } from 'typescript';
 //import { Dropdown } from 'react-native-material-dropdown';
 
 
@@ -44,15 +45,20 @@ const DATA = [
     }
 ];
 
+//let buy = this.stat;
+
 
 
 
 export default function NewSessionScreen(props) {
     const { user } = useContext(AuthContext);
+    const [userText, setText] = useState('$');
+    let cashText;
 
 
     return (
         <View style={s.global}>
+
             <CollapsibleHeaderScrollView
                 CollapsibleHeaderComponent={
                     <Header
@@ -73,8 +79,18 @@ export default function NewSessionScreen(props) {
                             borderBottomColor: '#282828',
                             borderBottomWidth: 1
                         }}
+                        centerComponent={
+                            {
+                                text: 'New Session',
+                                style: {
+                                    color: '#C2185B',
+                                    fontSize: 25
+                                }
+                            }
+                        }
 
                     />
+
                 }
                 headerHeight={80}
                 disableHeaderSnap={true}
@@ -89,9 +105,25 @@ export default function NewSessionScreen(props) {
                                         <Text style={styles.text}>{ }</Text>
                                     </View>
 
+
                                     <View style={styles.row}>
-                                        <TextInput style={styles.labelAlt} placeholder="Buy In" keyboardType="decimal-pad" ></TextInput>
-                                        <TextInput style={styles.labelAlt} placeholder="Cash Out" ></TextInput>
+                                        <Text style={styles.label} >Buy In</Text>
+                                        <Text style={{ fontSize: 30 }} >{userText.split(' ').map((word) => word && '').join(' ')}</Text>
+
+                                        <TextInput style={styles.text} keyboardType="decimal-pad"
+                                            onChangeText={userText => setText(userText)}
+                                            defaultValue={userText}>
+
+
+                                        </TextInput>
+
+                                        <Text style={styles.label} >Cash Out</Text>
+                                        <Text style={{ fontSize: 30 }} >{userText.split(' ').map((word) => word && '').join(' ')}</Text>
+                                        <TextInput style={styles.text} placeholder="Cash Out" keyboardType="decimal-pad"
+                                            onChangeText={userText => setText(userText)}
+                                            defaultValue={userText}>
+
+                                        </TextInput>
                                     </View>
 
                                     <View style={styles.row}>
