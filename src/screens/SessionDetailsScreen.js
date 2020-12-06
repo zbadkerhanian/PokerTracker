@@ -73,6 +73,11 @@ export default function SessionDetailsScreen(props){
                                         </View>
 
                                         <View style={styles.row}>
+                                            <Text style={styles.labelAlt1} >Location</Text>
+                                            <Text style={styles.text}>{props.route.params.location}</Text>
+                                        </View>
+
+                                        <View style={styles.row}>
                                             <Text style={styles.labelAlt} >Buy In</Text>
                                             <Text style={styles.labelAlt} >Cash Out</Text>
                                         </View>
@@ -180,6 +185,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         margin: 20,
         paddingVertical: 25
+    },
+    labelAlt1: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: '600',
+        margin: 20,
+        paddingVertical: 5
     },
     title: { 
         fontSize: 24, 

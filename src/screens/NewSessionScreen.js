@@ -1,6 +1,8 @@
 import s from '../styles/global'
 import React, { useState, useContext, Component, } from 'react';
 //import React, { Component } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-datepicker';
 
 import {
     View,
@@ -21,7 +23,11 @@ import Constants from 'expo-constants';
 import { AuthContext } from '../../context';
 import { TouchableOpacityComponent } from 'react-native';
 import { setTextRange } from 'typescript';
+import { format } from "date-fns";
+
 //import { Dropdown } from 'react-native-material-dropdown';
+
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 const { height, width } = Dimensions.get('window');
@@ -45,16 +51,49 @@ const DATA = [
     }
 ];
 
-//let buy = this.stat;
+function useInput() {
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
 
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
+    const showDatepicker = () => {
+        showMode('date');
+    };
 
-
+    const showTimepicker = () => {
+        showMode('time');
+    };
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+    }
+    return {
+        date,
+        showDatepicker,
+        showTimepicker,
+        show,
+        mode,
+        onChange
+    }
+}
 
 export default function NewSessionScreen(props) {
     const { user } = useContext(AuthContext);
     const [userText, setText] = useState('$');
     let cashText;
+    const input = useInput(new Date());
+    const input2 = useInput(new Date());
+    var formattedStartDate = format(input.date, "MM/dd/yyyy");
+    var formattedStartTime = format(input.date, "hh:mm a");
+    var formattedEndDate = format(input2.date, "MM/dd/yyyy");
+    var formattedEndTime = format(input2.date, "hh:mm a");
 
+    const state = { game: 'Texas Hold\'em' };
 
     return (
         <View style={s.global}>
@@ -102,7 +141,26 @@ export default function NewSessionScreen(props) {
                                 <View style={styles.container1}>
                                     <View style={styles.row}>
                                         <Text style={styles.label} >Game Type</Text>
-                                        <Text style={styles.text}>{ }</Text>
+                                        {/* <Text style={styles.text}>{ }</Text> */}
+                                        <DropDownPicker
+                                            items={[
+                                                { label: 'Texas Hold\'em', value: 'Texas Hold\'em', hidden: false },
+                                                { label: 'Limit Hold\'em', value: 'Limit Hold\'em', hidden: false },
+                                                { label: 'No Limit Hold\'em', value: 'No Limit Hold\'em', hidden: false },
+                                                { label: 'Poker', value: 'Poker', hidden: false },
+                                                { label: 'PLO Omaha', value: 'PLO Omaha', hidden: false },
+                                            ]}
+                                            defaultValue={state.game}
+                                            containerStyle={styles.dropDown}
+                                            style={{ backgroundColor: 'darkgray' }}
+                                            itemStyle={{
+                                                justifyContent: 'flex-start'
+                                            }}
+                                            dropDownStyle={{ backgroundColor: 'darkgray' }}
+                                            onChangeItem={item => {
+                                                game: item.value
+                                            }}
+                                        />
                                     </View>
 
 
@@ -126,15 +184,110 @@ export default function NewSessionScreen(props) {
                                         </TextInput>
                                     </View>
 
-                                    <View style={styles.row}>
-                                        <Text style={styles.label} >Start Time</Text>
-                                        <TextInput style={styles.textTime} ></TextInput>
+                                    <View>
+                                        <Text style={styles.labelAlt2} >Start Date/Time</Text>
+                                        {/* <Text style={styles.text}>{formattedStartDate + " " + formattedStartTime}</Text> */}
                                     </View>
 
                                     <View style={styles.row}>
-                                        <Text style={styles.label} >End Time</Text>
-                                        <TextInput style={styles.textTime} >{ }</TextInput>
+                                        <View>
+                                            <TouchableOpacity
+                                                // style = {styles.button1}
+                                                onPress={input.showDatepicker}
+                                            >
+                                                <Text style={styles.text}>{formattedStartDate}</Text>
+                                            </TouchableOpacity>
+
+                                            {/* <Button onPress={input.showDatepicker} title={"Start Date\t" + formattedStartDate}/> */}
+                                            <View>
+                                                {input.show && (
+                                                    <DateTimePicker
+                                                        testID="startDatePicker"
+                                                        value={input.date}
+                                                        mode={input.mode}
+                                                        is24Hour={false}
+                                                        display="spinner"
+                                                        onChange={input.onChange}
+                                                    />
+                                                )}
+                                            </View>
+                                        </View>
+
+                                        <View>
+                                            <TouchableOpacity
+                                                // style = {styles.button2}
+                                                onPress={input.showTimepicker}
+                                            >
+                                                <Text style={styles.text}>{formattedStartTime}</Text>
+                                            </TouchableOpacity>
+
+                                            {/* <Button onPress={input.showTimepicker} title={"Start Time\t" + formattedStartTime}/> */}
+                                            <View>
+                                                {input.show && (
+                                                    <DateTimePicker
+                                                        testID="startTimePicker"
+                                                        value={input.date}
+                                                        mode={input.mode}
+                                                        is24Hour={false}
+                                                        display="spinner"
+                                                        onChange={input.onChange}
+                                                    />
+                                                )}
+                                            </View>
+                                        </View>
                                     </View>
+
+                                    <View style={styles.row}>
+                                        <Text style={styles.labelAlt2} >End Date/Time</Text>
+                                        {/* <Text style={styles.text}>{formattedEndDate + "  " + formattedEndTime}</Text> */}
+                                    </View>
+
+                                    <View style={styles.row}>
+                                        <View>
+                                            <TouchableOpacity
+                                                // style = {styles.button1}
+                                                onPress={input2.showDatepicker}
+                                            >
+                                                <Text style={styles.text}>{formattedEndDate}</Text>
+                                            </TouchableOpacity>
+                                            {/* <Button onPress={input2.showDatepicker} title={"End Date\t" + formattedEndDate}/> */}
+                                            <View>
+                                                {input2.show && (
+                                                    <DateTimePicker
+                                                        testID="endDatePicker"
+                                                        value={input2.date}
+                                                        mode={input2.mode}
+                                                        is24Hour={false}
+                                                        display="spinner"
+                                                        onChange={input2.onChange}
+                                                    />
+                                                )}
+                                            </View>
+                                        </View>
+
+                                        <View>
+                                            <TouchableOpacity
+                                                style={styles.button2}
+                                                onPress={input2.showTimepicker}
+                                            >
+                                                <Text style={styles.text}>{formattedEndTime}</Text>
+                                            </TouchableOpacity>
+                                            {/* <Button onPress={input2.showTimepicker} title={"End Time\t" + formattedEndTime}/> */}
+                                            <View>
+                                                {input2.show && (
+                                                    <DateTimePicker
+                                                        testID="endTimePicker"
+                                                        value={input2.date}
+                                                        mode={input2.mode}
+                                                        is24Hour={false}
+                                                        display="spinner"
+                                                        onChange={input2.onChange}
+                                                    />
+                                                )}
+                                            </View>
+                                        </View>
+                                    </View>
+
                                 </View>
                             }
                         </View>
@@ -224,6 +377,14 @@ const styles = StyleSheet.create({
         margin: 20,
         paddingVertical: 25
     },
+    labelAlt2: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: '600',
+        marginLeft: 20,
+        marginBottom: 0,
+        paddingVertical: 0
+    },
     title: {
         fontSize: 24,
         fontWeight: '700',
@@ -237,7 +398,15 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginVertical: 10,
         overflow: "hidden"
+    },
+    dropDown: {
+        height: 40,
+        width: 170,
+        marginRight: 20,
+        marginTop: 33
     }
+
+
 });
 
 const loginStyles = StyleSheet.create({
@@ -268,5 +437,6 @@ const loginStyles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         margin: 5
+
     }
 });
