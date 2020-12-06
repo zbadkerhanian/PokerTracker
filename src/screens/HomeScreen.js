@@ -101,9 +101,10 @@ export default function HomeScreen(props) {
                                             props.navigation.navigate('SessionDetails',
                                                 {
                                                     gameType: 'No Limit Hold\'em',
+                                                    location: 'Aria',
                                                     startTime: '10/15/20  11:00 AM',
                                                     endTime: '10/15/20  1:00 PM',
-                                                    buyIn: '- $100',
+                                                    buyIn: '$100',
                                                     cashOut: '+ $200'
                                                 });
                                         }
@@ -128,9 +129,10 @@ export default function HomeScreen(props) {
                                             props.navigation.navigate('SessionDetails',
                                                 {
                                                     gameType: 'PLO Omaha',
+                                                    location: 'Bellagio',
                                                     startTime: '9/27/20  11:35 PM',
                                                     endTime: '9/28/20  1:00 AM',
-                                                    buyIn: '- $100',
+                                                    buyIn: '$100',
                                                     cashOut: '- $150'
                                                 });
                                         }
@@ -154,10 +156,11 @@ export default function HomeScreen(props) {
                                             props.navigation.navigate('SessionDetails',
                                                 {
                                                     gameType: 'Limit Hold\'em',
+                                                    location: 'Caesar\'s Palace',
                                                     startTime: '9/10/20  5:00 PM',
                                                     endTime: '9/10/20  8:00 PM',
-                                                    buyIn: '- $50',
-                                                    cashOut: '- $150'
+                                                    buyIn: '$50',
+                                                    cashOut: '+ $67'
                                                 });
                                         }
                                         }
