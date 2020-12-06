@@ -8,7 +8,8 @@ import {
     SafeAreaView,
     ScrollView,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { CollapsibleHeaderScrollView } from 'react-native-collapsible-header-views';
@@ -20,6 +21,26 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { height, width } = Dimensions.get('window');
 
+const SessionData = [
+    {
+        name: 'Aria',
+        startDate: '10/5/20',
+        gameType: 'No Limit Hold \'em',
+        cashout: '+$200'
+    },
+    {
+        name: 'Bellagio',
+        startDate: '10/7/20',
+        gameType: 'No Limit Hold \'em',
+        cashout: '-$150'
+    },
+    {
+        name: 'Ceasar\'s Palace',
+        startDate: '10/11/20',
+        gameType: 'No Limit Hold \'em',
+        cashout: '+$86'
+    }
+];
 
 export default function HomeScreen(props){
     const { user } = useContext(AuthContext);
@@ -95,86 +116,37 @@ export default function HomeScreen(props){
 
                                     <Text style={styles.text} >History</Text>
 
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={()=>{
-                                           props.navigation.navigate('SessionDetails', 
-                                                {   
-                                                    gameType: 'No Limit Hold\'em',
-                                                    startTime: '10/15/20  11:00 AM',
-                                                    endTime: '10/15/20  1:00 PM',
-                                                    buyIn: '- $100',
-                                                    cashOut: '+ $200'
-                                                    });
-                                            }
-                                       }
-                                    >   
-                                        
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Aria</Text>
-                                            <Text style={styles.textLeft} >10/5/20</Text>
-                                        </View>
+                                    <FlatList
+                                        data={SessionData}
+                                        renderItem={({item})=>(
+                                            <TouchableOpacity
+                                                style={styles.button}
+                                                onPress={()=>{
+                                                props.navigation.navigate('SessionDetails', 
+                                                        {   
+                                                            gameType: 'No Limit Hold\'em',
+                                                            startTime: '10/15/20  11:00 AM',
+                                                            endTime: '10/15/20  1:00 PM',
+                                                            buyIn: '- $100',
+                                                            cashOut: '+ $200'
+                                                            });
+                                                    }
+                                                }
+                                            >   
+                                                
+                                                <View style={styles.row}>
+                                                    <Text style={styles.text} >{item.name}</Text>
+                                                    <Text style={styles.textLeft} >{item.startDate} </Text>
+                                                </View>
 
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >No Limit Hold'em</Text>
-                                            <Text style={styles.textLeft} >+ $200</Text>
-                                        </View>
-                                         
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={()=>{
-                                            props.navigation.navigate('SessionDetails', 
-                                                 {   
-                                                     gameType: 'PLO Omaha',
-                                                     startTime: '9/27/20  11:35 PM',
-                                                     endTime: '9/28/20  1:00 AM',
-                                                     buyIn: '- $100',
-                                                     cashOut: '- $150'
-                                                     });
-                                             }
-                                        }
-                                    >   
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Bellagio</Text>
-                                            <Text style={styles.textLeft} >9/27/20</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >PLO Omaha</Text>
-                                            <Text style={styles.textLeft} >- $150</Text>
-                                        </View>
-                                         
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={()=>{
-                                            props.navigation.navigate('SessionDetails', 
-                                                 {   
-                                                     gameType: 'Limit Hold\'em',
-                                                     startTime: '9/10/20  5:00 PM',
-                                                     endTime: '9/10/20  8:00 PM',
-                                                     buyIn: '- $50',
-                                                     cashOut: '- $150'
-                                                     });
-                                             }
-                                        }
-                                        
-                                    >   
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Caesar's Palace</Text>
-                                            <Text style={styles.textLeft} >9/10/20</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Limit Hold'em</Text>
-                                            <Text style={styles.textLeft} >+ $67</Text>
-                                        </View>
-                                 
-                                    </TouchableOpacity>
-                                    
+                                                <View style={styles.row}>
+                                                    <Text style={styles.text} >{item.gameType}</Text>
+                                                    <Text style={styles.textLeft} >{item.cashout}</Text>
+                                                </View>
+                                                
+                                            </TouchableOpacity>
+                                        )}
+                                    />                           
                                 </View>
                             }
                         </View>
