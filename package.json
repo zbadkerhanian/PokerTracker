@@ -8,10 +8,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^3.0.5",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/drawer": "^5.1.0",
     "@react-navigation/native": "^5.0.8",
     "@react-navigation/stack": "^5.1.0",
+    "date-fns": "^2.16.1",
     "expo": "~39.0.2",
     "expo-status-bar": "~1.0.2",
     "firebase": "^7.14.0",
@@ -19,11 +21,18 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-collapsible-header-views": "^1.0.2",
+    "react-native-date-picker": "^3.2.5",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-dropdown-picker": "^3.7.1",
     "react-native-elements": "^2.3.2",
     "react-native-gesture-handler": "~1.5.0",
+    "react-native-material-dropdown": "^0.11.1",
     "react-native-reanimated": "~1.4.0",
     "react-native-screens": "2.0.0-alpha.12",
-    "react-native-web": "~0.13.12"
+    "react-native-timepicker": "^1.0.3",
+    "react-native-web": "~0.13.12",
+    "react-native-wheel-scroll-picker": "^0.2.4",
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
     "react-native-web": "~0.13.7",

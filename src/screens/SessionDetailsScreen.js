@@ -67,9 +67,30 @@ export default function SessionDetailsScreen(props){
                                     </Text>
                                     
                                     <View style={styles.container1}>
+                                        
+                                        <View style={styles.row}>
+                                            <Text style={styles.labelAlt1} >Location</Text>
+                                            <Text style={styles.text}>{props.route.params.location}</Text>
+                                        </View>
+                                        
                                         <View style={styles.row}>
                                             <Text style={styles.label} >Game Type</Text>
                                             <Text style={styles.text}>{props.route.params.gameType}</Text>
+                                        </View>
+
+                                        <View style={styles.row}>
+                                            <Text style={styles.label} >Stakes</Text>
+                                            <Text style={styles.text}>{props.route.params.stakes}</Text>
+                                        </View>
+                                        
+                                        <View style={styles.row}>
+                                            <Text style={styles.label} >Start Time</Text>
+                                            <Text style={styles.textTime} >{props.route.params.startTime}</Text>
+                                        </View>
+                                        
+                                        <View style={styles.row}>
+                                            <Text style={styles.label} >End Time</Text>
+                                            <Text style={styles.textTime} >{props.route.params.endTime}</Text>
                                         </View>
 
                                         <View style={styles.row}>
@@ -83,14 +104,11 @@ export default function SessionDetailsScreen(props){
                                         </View>
 
                                         <View style={styles.row}>
-                                            <Text style={styles.label} >Start Time</Text>
-                                            <Text style={styles.textTime} >{props.route.params.startTime}</Text>
+                                            <Text style={styles.label} >Profit</Text>
+                                            <Text style={styles.textTime} >{props.route.params.profit}</Text>
                                         </View>
+
                                         
-                                        <View style={styles.row}>
-                                            <Text style={styles.label} >End Time</Text>
-                                            <Text style={styles.textTime} >{props.route.params.endTime}</Text>
-                                        </View>
                                     </View>                                 
                                 </View>
                             }                              
@@ -180,6 +198,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         margin: 20,
         paddingVertical: 25
+    },
+    labelAlt1: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: '600',
+        margin: 20,
+        paddingVertical: 5
     },
     title: { 
         fontSize: 24, 
