@@ -15,6 +15,7 @@ import {Utilities, ScreenDimensions} from '../global_functions/Utilities';
 import * as firebase from "firebase/app";
 import { AuthContext } from '../../context';
 
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SignupScreen(props) {
   const { setUser } = useContext(AuthContext);
@@ -124,6 +125,16 @@ export default function SignupScreen(props) {
 
   return(
     <View style={styles.container1}>
+      <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'transparent']}
+          style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          height: 400,
+          }}
+      />
       <ScrollView style={{height: ScreenDimensions.height}}>
         <View style={[{marginTop: 70, flex: 1} ]}>
           <Logo/>
@@ -140,7 +151,6 @@ export default function SignupScreen(props) {
               placeholderTextColor = "#ffffff"
               errorMessages={['This field is required']}
               returnKeyType='next'
-              //selectionColor="#fff"
               onSubmitEditing={()=> usernameTextInput.focus()}
             />
             <TextInput style={[styles.inputBox, !usernameValidated? styles.error : null]}
@@ -201,7 +211,7 @@ export default function SignupScreen(props) {
 const styles = StyleSheet.create({
   container1:{
     flex: 1,
-    backgroundColor: "#455a64"
+    backgroundColor: "#1A1D51"
   },
   container: {
     flexGrow: 1,
@@ -225,17 +235,18 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     width:300,
-    backgroundColor:'rgba(255, 255,255,0.3)',
+    backgroundColor:'#903DFC',
     borderRadius: 25,
     paddingHorizontal:16,
     fontSize:16,
+    fontFamily: "normal",
     color:'#ffffff',
     marginVertical: 10,
     paddingVertical: 10
   },
   button: {
     width:300,
-    backgroundColor:'#1c313a',
+    backgroundColor:'#62FAE0',
     borderRadius: 25,
     marginVertical: 10,
     paddingVertical: 13
@@ -243,7 +254,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize:16,
     fontWeight:'500',
-    color:'#ffffff',
+    color:'black',
     textAlign:'center'
   },
   error:{

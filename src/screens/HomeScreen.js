@@ -17,6 +17,7 @@ import Constants from 'expo-constants';
 import { AuthContext } from '../../context';
 import { Loading } from '../../App'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const { height, width } = Dimensions.get('window');
@@ -36,7 +37,7 @@ const SessionData = [
         location: "Bellagio",
         startTime: "10/7/20  8:00 PM",
         endTime: "10/7/20  10:00 PM",
-        gameType: "NL Texas Hold'em",
+        gameType: "Pot Limit Omaha",
         stakes: "2/5",
         buyIn: 300,
         cashOut: 416,
@@ -46,7 +47,7 @@ const SessionData = [
         location: "Ceasar\'s Palace",
         startTime: "10/11/20  9:00 PM",
         endTime: "10/11/20  11:30 PM",
-        gameType: "NL Texas Hold'em",
+        gameType: "Seven Card Stud",
         stakes: "1/2",
         buyIn: 200,
         cashOut: 86,
@@ -70,12 +71,20 @@ function getProfitStr(item){
     profitStrings.push(profitStr)
 }
 
+function disPlayProfit(item){
+    if(item.charAt(0) == '$')
+    {
+        return<Text style={styles.textGreen}>{item}</Text>
+    } else {
+        return<Text style={styles.textRed}>{item}</Text>
+    }
+}
+
 export default function HomeScreen(props) {
     const { user } = useContext(AuthContext);
 
     SessionData.forEach(getProfitStr)
 
-    
 
     return (
         <View style={s.global}>
@@ -90,8 +99,8 @@ export default function HomeScreen(props) {
 
                         leftComponent={{
                             icon: 'menu',
-                            color: '#C2185B',
-                            underlayColor: '#282828',
+                            color: 'white',
+                            underlayColor: '#red',
                             onPress: props.navigation.openDrawer
                         }}
 
@@ -99,7 +108,7 @@ export default function HomeScreen(props) {
                             {
                                 text: 'PokerTracker',
                                 style: {
-                                    color: '#C2185B',
+                                    color: 'white',
                                     fontSize: 25
                                 }
                             }
@@ -109,15 +118,15 @@ export default function HomeScreen(props) {
                             <Icon
                                 name='user'
                                 type='font-awesome'
-                                color='#C2185B'
-                                underlayColor='#282828'
+                                color='white'
+                                underlayColor='#1A1D51'
                                 onPress={() => console.log("do nothing")} />
                         }
 
                         containerStyle={{
                             height: 80,
-                            backgroundColor: '#282828',
-                            borderBottomColor: '#282828',
+                            backgroundColor: '#1A1D51',
+                            borderBottomColor: '#1A1D51',
                             borderBottomWidth: 1
                         }}
 
@@ -127,62 +136,81 @@ export default function HomeScreen(props) {
                 disableHeaderSnap={true}
             >
 
-
                 <SafeAreaView>
                     <ScrollView scrollEventThrottle={16}>
-                        <View>
+                        <View style={styles.background}>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                                style={{
+                                position: 'absolute',
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                height: 400,
+                                }}
+                            />
                             {user &&
                                 <View>
                                     <Text style={styles.textAlt}>
                                         Hello {user.name}!
                                     </Text>
 
+                                    {/* <LinearGradient 
+                                        colors={['#903DFC', '#62FAE0']} 
+                                        style={styles.button} 
+                                        start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                    > */}
+                                    <View style ={styles.newSessionButton}>
+                                        <TouchableOpacity
+                                                onPress={() => props.navigation.navigate('NewSession')}>
+                                            <Text style={styles.textLeft} >New Session</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/* </LinearGradient>    */}
 
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => props.navigation.navigate('NewSession')}
-                                    >
-                                        <Text style={styles.text} >New Session</Text>
-                                    </TouchableOpacity>
-
-                                    <Text style={styles.text} >History</Text>
+                                    <Text style={styles.textAlt} >History</Text>                
 
                                     <FlatList
                                         data={SessionData}
                                         renderItem={({item, index})=>
 
                                         
-                                                
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.button} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
                                             <TouchableOpacity
-                                                style={styles.button}
-                                                onPress={()=>{
-                                                props.navigation.navigate('SessionDetails', 
-                                                        {   
-                                                            location: item.location,
-                                                            gameType: item.gameType,
-                                                            stakes: item.stakes,
-                                                            startTime: item.startTime,
-                                                            endTime: item.endTime,
-                                                            buyIn: item.buyIn,
-                                                            cashOut: item.cashOut,
-                                                            profit: item.profit
-                                                        });
+                                                    style={styles.button}
+                                                    onPress={()=>{
+                                                    props.navigation.navigate('SessionDetails', 
+                                                            {   
+                                                                location: item.location,
+                                                                gameType: item.gameType,
+                                                                stakes: item.stakes,
+                                                                startTime: item.startTime,
+                                                                endTime: item.endTime,
+                                                                buyIn: item.buyIn,
+                                                                cashOut: item.cashOut,
+                                                                profit: item.profit
+                                                            });
+                                                        }
                                                     }
-                                                }
-                                            >   
-                                                
-                                                <View style={styles.row}>
-                                                    <Text style={styles.text} >{item.location}</Text>
-                                                    <Text style={styles.textLeft} >{item.startTime} </Text>
-                                                </View>
-                                                
-                                                <View style={styles.row}>
-                                                    <Text style={styles.text} >{item.gameType}</Text>
-                                                    <Text style={styles.textLeft} >{profitStrings.shift()}</Text>
-                                                </View>
-                                                
-                                                
-                                            </TouchableOpacity>
+                                                >   
+                                                    
+                                                    <View style={styles.row}>
+                                                        <Text style={styles.text} >{item.location}</Text>
+                                                        <Text style={styles.textLeft} >{item.startTime} </Text>
+                                                    </View>
+                                                    
+                                                    <View style={styles.row}>
+                                                        <Text style={styles.text} >{item.gameType}</Text>
+                                                        {disPlayProfit(profitStrings.shift())}
+                                                    </View>
+                                                    
+                                                    
+                                                </TouchableOpacity>
+                                        </LinearGradient>
                                         }
                                     />                           
                                 </View>
@@ -198,6 +226,9 @@ export default function HomeScreen(props) {
 
 
 const styles = StyleSheet.create({
+    background: {
+        backgroundColor: "#1A1D51",
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -211,7 +242,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         margin: 20,
     },
@@ -220,22 +251,42 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 20,
     },
+    textGreen: {
+        color: 'green',
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 20,
+    },
+    textRed: {
+        color: 'red',
+        fontWeight: "bold",
+        fontSize: 20,
+        margin: 20,
+    },
     textAlt: {
         fontSize: 24,
         fontWeight: '700',
-        color: 'black',
+        color: 'white',
         flex: 1,
         marginLeft: 10,
         margin: 20
     },
     button: {
-        alignItems: "flex-start",
-        backgroundColor: "#DDDDDD",
-        padding: 10,
+        padding: 0,
         marginHorizontal: 20,
         marginBottom: 20,
         color: "red",
-        margin: 20
+        margin: 20,
+        borderRadius: 40,
+    },
+    newSessionButton: {
+        padding: 0,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        color: "red",
+        margin: 20,
+        borderRadius: 40,
+        backgroundColor: "#62FAE0"
     },
     title: {
         fontSize: 24,

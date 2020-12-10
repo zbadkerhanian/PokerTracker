@@ -28,6 +28,8 @@ import { format } from "date-fns";
 //import { Dropdown } from 'react-native-material-dropdown';
 
 import DropDownPicker from 'react-native-dropdown-picker';
+import { LinearGradient } from 'expo-linear-gradient';
+import {Picker} from '@react-native-picker/picker';
 
 
 const { height, width } = Dimensions.get('window');
@@ -93,13 +95,16 @@ export default function NewSessionScreen(props) {
     var formattedStartTime = format(input.date, "hh:mm a");
     var formattedEndDate = format(input2.date, "MM/dd/yyyy");
     var formattedEndTime = format(input2.date, "hh:mm a");
+    const [stakeNum, setStakeNum] = useState('');
+    const [stakeDenom, setStakeDenom] = useState('');
 
-    const state = { game: "NL Texas Hold'em" };
+    const [selectedGameValue, setSelectedGameValue] = useState("NL Texas Hold'em");
 
     return (
         <View style={s.global}>
 
             <CollapsibleHeaderScrollView contentContainerStyle={styles.container}
+            
                 CollapsibleHeaderComponent={
                     <Header
                         statusBarProps={{
@@ -109,13 +114,13 @@ export default function NewSessionScreen(props) {
                         }}
                         leftComponent={{
                             icon: 'chevron-left',
-                            color: '#C2185B',
-                            underlayColor: '#282828',
+                            color: 'white',
+                            underlayColor: '#1A1D51',
                             onPress: () => props.navigation.goBack()
                         }}
                         containerStyle={{
                             height: 80,
-                            backgroundColor: '#282828',
+                            backgroundColor: '#1A1D51',
                             borderBottomColor: '#282828',
                             borderBottomWidth: 1
                         }}
@@ -123,7 +128,7 @@ export default function NewSessionScreen(props) {
                             {
                                 text: 'New Session',
                                 style: {
-                                    color: '#C2185B',
+                                    color: 'white',
                                     fontSize: 25
                                 }
                             }
@@ -136,53 +141,75 @@ export default function NewSessionScreen(props) {
                 disableHeaderSnap={true}
             >
                 <SafeAreaView style={styles.container} >
+                <ScrollView scrollEventThrottle={16}>
                     {user &&
                         <View style={styles.container}>
-                            <View style={styles.row}>
-                                <Text style={styles.label} >Game Type</Text>
-                                <DropDownPicker
-                                    items={[
-                                        { label: "NL Texas Hold'em", value: "NL Texas Hold'em", hidden: false },
-                                        { label: "Limit Texas Hold'em", value: "Limit Texas Hold'em", hidden: false },
-                                        { label: "Pot Limit Omaha", value: "Pot Limit Omaha", hidden: false },
-                                        { label: "Seven Card Stud", value: "Seven Card Stud", hidden: false },
-                                        { label: "Three Card Poker", value: "Three Card Poker", hidden: false },
-                                    ]}
-                                    defaultValue={state.game}
-                                    containerStyle={styles.dropDown}
-                                    style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'darkgray' }}
-                                    itemStyle={{
-                                        justifyContent: 'flex-start'
-                                    }}
-                                    dropDownStyle={{ backgroundColor: 'darkgray' }}
-                                    onChangeItem={item => {
-                                        game: item.value
-                                    }}
-                                />
-                            </View>
+                            <LinearGradient
+                            colors={['rgba(0,0,0,0.8)', 'transparent']}
+                            style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            height: 400,
+                            }}
+                        />
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.dropDownPicker} 
+                                start={{ y: 0.0, x: 0.2 }} end={{ y: 0.0, x: 1 }}>
+                                
+                                <Text style={styles.labelGame} >Game Type</Text>
 
+                                <Picker
+                                    selectedValue={selectedGameValue}
+                                    style={styles.picker}
+                                    mode={"dropdown"}
+                                    onValueChange={(itemValue, itemIndex) => setSelectedGameValue(itemValue)}
+                                >
+                                    <Picker.Item label="NL Texas Hold'em" value= "NL Texas Hold'em" />
+                                    <Picker.Item label="Limit Texas Hold'em" value="Limit Texas Hold'em" />
+                                    <Picker.Item label= "Pot Limit Omaha" value= "Pot Limit Omaha" />
+                                    <Picker.Item label="Seven Card Stud" value="Seven Card Stud"/>
+                                    <Picker.Item label= "Three Card Poker" value="Three Card Poker"/>
+                                </Picker>
 
-                            <View style={styles.row}>
-                                <Text style={styles.label} >Buy In</Text>
-                                <View style={styles.textBox}>
-                                    <Text style={styles.text}>$</Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]} keyboardType="decimal-pad"
+                            </LinearGradient>
+
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.row} 
+                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
+                                    <Text style={styles.labelStakes} >Stakes</Text>
+                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput1]}maxLength={4} keyboardType="decimal-pad"
+                                        onChangeText={input => setStakeNum(input)} />
+                                    <Text style={styles.text2}> / </Text>
+                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput2]} maxLength={4} keyboardType="decimal-pad"
+                                        onChangeText={input => setStakeDenom(input)} />
+
+                            </LinearGradient>
+
+                           
+
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.row} 
+                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
+                                    <Text style={styles.label} >Buy In</Text>
+                                    <Text style={styles.text2}>$</Text>
+                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]} maxLength={4} keyboardType="decimal-pad"
                                         onChangeText={input => setBuyIn(input)} />
-                                </View>
-
-
-                                <Text style={styles.label} >Cash Out</Text>
-                                <View style={styles.textBox}>
-                                    <Text style={styles.text}>$</Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]} keyboardType="decimal-pad"
+                                        
+                                    <Text style={styles.label1} >Cash Out</Text>
+                                    <Text style={styles.text2}>$</Text>
+                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text1]} maxLength={4} keyboardType="decimal-pad"
                                         onChangeText={input => setCashOut(input)}/>
-                                </View>
-                            </View>
-
+                            </LinearGradient>
                             
-
-                            <View style={styles.row}>
-                                    
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.row} 
+                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
                                     <Text style={styles.label} >Start Date/Time</Text>
                                     
                                     <TouchableOpacity
@@ -224,11 +251,13 @@ export default function NewSessionScreen(props) {
                                             />
                                         )}
                                     </View>
-                            </View>
+                            </LinearGradient>
 
-                            
-
-                            <View style={styles.row}>
+                                    
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.row} 
+                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
                                     <Text style={styles.label} >End Date/Time</Text>
                                     
                                     <TouchableOpacity
@@ -256,7 +285,6 @@ export default function NewSessionScreen(props) {
                                     >
                                         <Text style={styles.textBox}>{formattedEndTime}</Text>
                                     </TouchableOpacity>
-                                    {/* <Button onPress={input2.showTimepicker} title={"End Time\t" + formattedEndTime}/> */}
                                         {input2.show && (
                                             <DateTimePicker
                                                 testID="endTimePicker"
@@ -267,10 +295,10 @@ export default function NewSessionScreen(props) {
                                                 onChange={input2.onChange}
                                             />
                                         )}
-                            </View>
-
+                            </LinearGradient>
                         </View>
                     }
+                    </ScrollView>
                 </SafeAreaView>
             </CollapsibleHeaderScrollView>
         </View>
@@ -280,40 +308,92 @@ export default function NewSessionScreen(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: "#1A1D51"
     },
     row: {
         flexDirection: "row",
         backgroundColor: '#dddddd',
-        margin: 5,
-        //justifyContent: 'center', 
+        marginTop: 40,
         alignItems: 'center',
-        height: 80
+        height: 95,
+        padding: 0,
+        marginHorizontal: 30,
+        borderRadius: 30,
     },
     text: {
         color: 'black',
         fontSize: 20,
         textAlign: 'center',
-        textAlignVertical: 'center'
+        textAlignVertical: 'center',
+        backgroundColor: '#DDDBF5',
+        height: 40,
+        borderRadius: 10
+    },
+    text1: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        backgroundColor: '#DDDBF5',
+        height: 40,
+        borderRadius: 10,
+        marginRight: 20
+    },
+    text2: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        marginLeft: 0,
+        marginRight: 10
+
+    },
+    stakesInput1: {
+        backgroundColor: "#DDDBF5",
+        height: 40,
+        width: 10,
+        marginRight: 10,
+        fontSize: 20,
+        marginLeft: 60,
+        borderRadius: 10,
+        color: 'black',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+    stakesInput2: {
+        alignItems: 'center', 
+        backgroundColor: "#DDDBF5",
+        height: 40,
+        width: 50,
+        marginRight: 20,
+        marginLeft: 0,
+        borderRadius: 10,
+        fontSize: 20,
+        color: 'black',
+        textAlign: 'center',
+        textAlignVertical: 'center',
     },
     textBox: {
         flex: 1,
         flexDirection: "row",
         padding: 5,
-        backgroundColor: "darkgray",
+        fontSize:18,
+        color: "black",
+        paddingVertical: 12
 
     },
     textAlt: {
         fontSize: 24,
         fontWeight: '700',
-        color: 'black',
+        color: 'white',
         flex: 1,
         marginLeft: 10,
         marginTop: 20,
     },
     textTime: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         margin: 20,
         paddingHorizontal: 30,
@@ -325,7 +405,7 @@ const styles = StyleSheet.create({
     },
     textAmount: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         margin: 25,
         marginLeft: 20,
@@ -339,33 +419,64 @@ const styles = StyleSheet.create({
     },
     label: {
         flex:1,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginLeft: 20,
+        // backgroundColor:"blue"
+    },
+    labelStakes: {
+        flex:1,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginLeft: 20,
+        paddingRight: 0 
+
+    },
+    label1: {
+        flex:1,
         color: 'black',
         fontSize: 20,
         fontWeight: '600',
         justifyContent: 'center', 
         alignItems: 'center',
-        marginLeft: 10
+        marginLeft: 20
 
     },
     labelAlt: {
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         fontWeight: '600',
         margin: 20,
         paddingVertical: 25
     },
     labelAlt2: {
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         fontWeight: '600',
         marginLeft: 20,
         marginBottom: 0,
         paddingVertical: 0
     },
+    labelGame: {
+        flex: 1,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        margin: 20,
+        marginTop: 30
+    },
     title: {
         fontSize: 24,
         fontWeight: '700',
-        color: 'black'
+        color: 'white'
     },
     placeContainer: {
         width: width - 40,
@@ -377,14 +488,43 @@ const styles = StyleSheet.create({
         overflow: "hidden"
     },
     dropDown: {
+        flex: 1,
         height: 40,
         width: 170,
         justifyContent: 'center', 
-        alignItems: 'center',
+        alignItems: 'flex-start',
         margin: 20
     },
     dateButton: {
-        height: 50
+        height: 50,
+        marginTop: 2,
+        marginRight: 10,
+        backgroundColor: "#DDDBF5",
+        borderRadius: 10
+    },
+    picker: {
+        height: 50, 
+        width: 208,
+        marginTop: 20,
+        color: "black"
+    },
+    dropDownPicker:{
+        flexDirection: "row",
+        backgroundColor: '#dddddd',
+        marginTop: 50,
+        height: 95,
+        padding: 0,
+        marginHorizontal: 30,
+        borderRadius: 30,
+    },
+    stakePicker: {
+        height: 50, 
+        width: 100,
+        marginTop: 20,
+        color: "black"
+    },
+    stakesPickerText: {
+        fontSize: 12
     }
 
 

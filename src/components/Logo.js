@@ -24,9 +24,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logoText : {
-	marginBottom: 25,
-  	//marginVertical: 5,
-  	fontSize:35,
-  	color:'rgba(255, 255, 255, 0.7)'
+	  color: 'white',
+	  fontSize: 35,
+	  margin: 20,
+	  textAlign: "center"
   }
 });

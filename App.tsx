@@ -40,7 +40,7 @@ export const Loading = () => (
 
 export default function App(){
     const [isLoading, setIsLoading] = React.useState(false);
-    const [user, setUser] = React.useState("asdf");
+    const [user, setUser] = React.useState("dgfd");
 
     React.useEffect(() => {
       console.log("in useEffect----------------")
