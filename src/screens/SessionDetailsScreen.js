@@ -46,7 +46,6 @@ function displayProfit(item){
 }
 
 
-
 export default function SessionDetailsScreen(props){
     const { user } = useContext(AuthContext);
 

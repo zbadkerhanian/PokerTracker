@@ -22,7 +22,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { height, width } = Dimensions.get('window');
 
-const SessionData = [
+
+export let SessionData = [
     {
         location: "Aria",
         startTime: "10/5/20  11:00 PM",
@@ -44,7 +45,7 @@ const SessionData = [
         profit: 116
     },
     {
-        location: "Ceasar\'s Palace",
+        location: "Ceasar's Palace",
         startTime: "10/11/20  9:00 PM",
         endTime: "10/11/20  11:30 PM",
         gameType: "Seven Card Stud",
@@ -71,18 +72,21 @@ function getProfitStr(item){
     profitStrings.push(profitStr)
 }
 
-function disPlayProfit(item){
-    if(item.charAt(0) == '$')
+function displayProfit(item){
+    if(item)
     {
-        return<Text style={styles.textGreen}>{item}</Text>
-    } else {
-        return<Text style={styles.textRed}>{item}</Text>
-    }
+        if(item.charAt(0) == "-")
+        {
+            return<Text style={styles.textRed}>{'-$' + (-1) * item}</Text>
+        } else {
+            return<Text style={styles.textGreen}>{'$' + item}</Text>
+        }
+    }   
 }
 
 export default function HomeScreen(props) {
     const { user } = useContext(AuthContext);
-
+    
     SessionData.forEach(getProfitStr)
 
 
@@ -155,18 +159,12 @@ export default function HomeScreen(props) {
                                         Hello {user.name}!
                                     </Text>
 
-                                    {/* <LinearGradient 
-                                        colors={['#903DFC', '#62FAE0']} 
-                                        style={styles.button} 
-                                        start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                    > */}
                                     <View style ={styles.newSessionButton}>
                                         <TouchableOpacity
                                                 onPress={() => props.navigation.navigate('NewSession')}>
                                             <Text style={styles.textLeft} >New Session</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    {/* </LinearGradient>    */}
 
                                     <Text style={styles.textAlt} >History</Text>                
 
@@ -205,9 +203,8 @@ export default function HomeScreen(props) {
                                                     
                                                     <View style={styles.row}>
                                                         <Text style={styles.text} >{item.gameType}</Text>
-                                                        {disPlayProfit(profitStrings.shift())}
+                                                        {displayProfit(item.profit.toString())}
                                                     </View>
-                                                    
                                                     
                                                 </TouchableOpacity>
                                         </LinearGradient>

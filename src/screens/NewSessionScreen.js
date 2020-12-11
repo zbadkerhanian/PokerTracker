@@ -14,6 +14,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Button,
+    FlatList,
     SectionList,
     TextInput
 } from 'react-native';
@@ -24,6 +25,7 @@ import { AuthContext } from '../../context';
 import { TouchableOpacityComponent } from 'react-native';
 import { setTextRange } from 'typescript';
 import { format } from "date-fns";
+import { SessionData } from '../../src/screens/HomeScreen';
 
 //import { Dropdown } from 'react-native-material-dropdown';
 
@@ -86,19 +88,20 @@ function useInput() {
 
 export default function NewSessionScreen(props) {
     const { user } = useContext(AuthContext);
-    const [buyIn, setBuyIn] = useState('$');
-    const [cashOut, setCashOut] = useState('$');
+    const [buy, setBuy] = useState('');
+    const [cash, setCash] = useState('');
     let cashText;
     const input = useInput(new Date());
     const input2 = useInput(new Date());
-    var formattedStartDate = format(input.date, "MM/dd/yyyy");
+    var formattedStartDate = format(input.date, "MM/dd/yy");
     var formattedStartTime = format(input.date, "hh:mm a");
-    var formattedEndDate = format(input2.date, "MM/dd/yyyy");
+    var formattedEndDate = format(input2.date, "MM/dd/yy");
     var formattedEndTime = format(input2.date, "hh:mm a");
-    const [stakeNum, setStakeNum] = useState('');
-    const [stakeDenom, setStakeDenom] = useState('');
-
+    const [location, setLocation] = useState('');
     const [selectedGameValue, setSelectedGameValue] = useState("NL Texas Hold'em");
+    const [stake1, setStake1] = useState('');
+    const [stake2, setStake2] = useState('');
+    let [session, setSession] = useState(SessionData);
 
     return (
         <View style={s.global}>
@@ -154,13 +157,14 @@ export default function NewSessionScreen(props) {
                             height: 400,
                             }}
                         />
+                                                                                          
+                                    
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.dropDownPicker} 
                                 start={{ y: 0.0, x: 0.2 }} end={{ y: 0.0, x: 1 }}>
                                 
                                 <Text style={styles.labelGame} >Game Type</Text>
-
                                 <Picker
                                     selectedValue={selectedGameValue}
                                     style={styles.picker}
@@ -173,7 +177,15 @@ export default function NewSessionScreen(props) {
                                     <Picker.Item label="Seven Card Stud" value="Seven Card Stud"/>
                                     <Picker.Item label= "Three Card Poker" value="Three Card Poker"/>
                                 </Picker>
+                            </LinearGradient>
 
+                            <LinearGradient 
+                                colors={['#903DFC', '#62FAE0']} 
+                                style={styles.row} 
+                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
+                                    <Text style={styles.labelStakes} >Location</Text>
+                                    <TextInput id = "1" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.locationInput]}maxLength={1100} keyboardType="decimal-pad"
+                                        onChangeText={(input) => setLocation(input)} />
                             </LinearGradient>
 
                             <LinearGradient 
@@ -181,15 +193,12 @@ export default function NewSessionScreen(props) {
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
                                     <Text style={styles.labelStakes} >Stakes</Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput1]}maxLength={4} keyboardType="decimal-pad"
-                                        onChangeText={input => setStakeNum(input)} />
+                                    <TextInput id = "1" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.locationInput]}maxLength={1100} keyboardType="decimal-pad"
+                                        onChangeText={(input) => setStake1(input)} />
                                     <Text style={styles.text2}> / </Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput2]} maxLength={4} keyboardType="decimal-pad"
-                                        onChangeText={input => setStakeDenom(input)} />
-
+                                    <TextInput id = "3" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput2]} maxLength={4} keyboardType="decimal-pad"
+                                        onChangeText={(input) => setStake2(input)} />
                             </LinearGradient>
-
-                           
 
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
@@ -197,13 +206,13 @@ export default function NewSessionScreen(props) {
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
                                     <Text style={styles.label} >Buy In</Text>
                                     <Text style={styles.text2}>$</Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]} maxLength={4} keyboardType="decimal-pad"
-                                        onChangeText={input => setBuyIn(input)} />
+                                    <TextInput id = "4" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]}keyboardType="decimal-pad"
+                                        onChangeText={input => setBuy(input)} />
                                         
                                     <Text style={styles.label1} >Cash Out</Text>
                                     <Text style={styles.text2}>$</Text>
-                                    <TextInput style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text1]} maxLength={4} keyboardType="decimal-pad"
-                                        onChangeText={input => setCashOut(input)}/>
+                                    <TextInput id = "5" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text1]}keyboardType="decimal-pad"
+                                        onChangeText={input => setCash(input)}/>
                             </LinearGradient>
                             
                             <LinearGradient 
@@ -296,13 +305,46 @@ export default function NewSessionScreen(props) {
                                             />
                                         )}
                             </LinearGradient>
+
+                            <View style ={styles.newSessionButton}>
+                                        <TouchableOpacity
+                                                onPress={()=>{ session.push({
+                                                        location: location,
+                                                        startTime: formattedStartDate + "  " + formattedStartTime,
+                                                        endTime: formattedEndDate + "  " + formattedEndTime,
+                                                        gameType: selectedGameValue,
+                                                        stakes: stake1 + "/" + stake2,
+                                                        buyIn: buy,
+                                                        cashOut: cash,
+                                                        profit: cash - buy
+                                                    });
+                                                    props.navigation.navigate('Home', {   
+                                                        location: location,
+                                                        startTime: input,
+                                                        endTime: input2,
+                                                        gameType: selectedGameValue,
+                                                        stakes: stake1 + "/" + stake2,
+                                                        buyIn: buy,
+                                                        cashOut: cash,
+                                                        profit: cash - buy
+                                                    }); 
+                                                }
+                                                }
+                                            >
+                                            <Text style={styles.saveText} >Save Session</Text>
+                                        </TouchableOpacity>
+                                    </View>
                         </View>
                     }
+                    
                     </ScrollView>
                 </SafeAreaView>
             </CollapsibleHeaderScrollView>
         </View>
+        
     );
+
+    
 }
 
 
@@ -348,6 +390,17 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         marginRight: 10
 
+    },
+    locationInput: {
+        backgroundColor: "#DDDBF5",
+        height: 40,
+        width: 10,
+        marginRight: 20,
+        fontSize: 20,
+        borderRadius: 10,
+        color: 'black',
+        textAlign: 'center',
+        textAlignVertical: 'center',
     },
     stakesInput1: {
         backgroundColor: "#DDDBF5",
@@ -425,7 +478,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center',
         marginLeft: 20,
-        // backgroundColor:"blue"
     },
     labelStakes: {
         flex:1,
@@ -436,7 +488,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 20,
         paddingRight: 0 
-
     },
     label1: {
         flex:1,
@@ -446,7 +497,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center',
         marginLeft: 20
-
     },
     labelAlt: {
         color: 'white',
@@ -525,9 +575,28 @@ const styles = StyleSheet.create({
     },
     stakesPickerText: {
         fontSize: 12
+    },
+    newSessionButton: {
+        flex: 1,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        marginLeft: 30,
+        marginRight: 30,
+        color: "red",
+        margin: 20,
+        borderRadius: 40,
+        backgroundColor: 'red'
+    },
+    saveText: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        backgroundColor: '#62FAE0',
+        height: 40,
+        borderRadius: 10
     }
-
-
 });
 
 const loginStyles = StyleSheet.create({
