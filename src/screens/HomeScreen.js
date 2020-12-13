@@ -8,7 +8,8 @@ import {
     SafeAreaView,
     ScrollView,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { CollapsibleHeaderScrollView } from 'react-native-collapsible-header-views';
@@ -16,13 +17,77 @@ import Constants from 'expo-constants';
 import { AuthContext } from '../../context';
 import { Loading } from '../../App'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const { height, width } = Dimensions.get('window');
 
 
+export let SessionData = [
+    {
+        location: "Aria",
+        startTime: "10/5/20  11:00 PM",
+        endTime: "10/6/20  1:00 AM",
+        gameType: "NL Texas Hold'em",
+        stakes: "1/3",
+        buyIn: 200,
+        cashOut: 400,
+        profit: 200
+    },
+    {
+        location: "Bellagio",
+        startTime: "10/7/20  8:00 PM",
+        endTime: "10/7/20  10:00 PM",
+        gameType: "Pot Limit Omaha",
+        stakes: "2/5",
+        buyIn: 300,
+        cashOut: 416,
+        profit: 116
+    },
+    {
+        location: "Ceasar's Palace",
+        startTime: "10/11/20  9:00 PM",
+        endTime: "10/11/20  11:30 PM",
+        gameType: "Seven Card Stud",
+        stakes: "1/2",
+        buyIn: 200,
+        cashOut: 86,
+        profit: -114
+    }
+];
+
+var profitStrings = []
+
+function getProfitStr(item){
+    let temp = 0
+    let profitStr = ''
+    if(item.profit >= 0){
+        profitStr = '$' + item.profit
+    }
+    else{
+        temp = (-1) * item.profit
+        profitStr = '-$' + temp;
+    }
+
+    profitStrings.push(profitStr)
+}
+
+function displayProfit(item){
+    if(item)
+    {
+        if(item.charAt(0) == "-")
+        {
+            return<Text style={styles.textRed}>{'-$' + (-1) * item}</Text>
+        } else {
+            return<Text style={styles.textGreen}>{'$' + item}</Text>
+        }
+    }   
+}
+
 export default function HomeScreen(props) {
     const { user } = useContext(AuthContext);
+    
+    SessionData.forEach(getProfitStr)
 
 
     return (
@@ -38,8 +103,8 @@ export default function HomeScreen(props) {
 
                         leftComponent={{
                             icon: 'menu',
-                            color: '#C2185B',
-                            underlayColor: '#282828',
+                            color: 'white',
+                            underlayColor: '#red',
                             onPress: props.navigation.openDrawer
                         }}
 
@@ -47,7 +112,7 @@ export default function HomeScreen(props) {
                             {
                                 text: 'PokerTracker',
                                 style: {
-                                    color: '#C2185B',
+                                    color: 'white',
                                     fontSize: 25
                                 }
                             }
@@ -57,15 +122,15 @@ export default function HomeScreen(props) {
                             <Icon
                                 name='user'
                                 type='font-awesome'
-                                color='#C2185B'
-                                underlayColor='#282828'
+                                color='white'
+                                underlayColor='#1A1D51'
                                 onPress={() => console.log("do nothing")} />
                         }
 
                         containerStyle={{
                             height: 80,
-                            backgroundColor: '#282828',
-                            borderBottomColor: '#282828',
+                            backgroundColor: '#1A1D51',
+                            borderBottomColor: '#1A1D51',
                             borderBottomWidth: 1
                         }}
 
@@ -75,109 +140,76 @@ export default function HomeScreen(props) {
                 disableHeaderSnap={true}
             >
 
-
                 <SafeAreaView>
                     <ScrollView scrollEventThrottle={16}>
-                        <View>
+                        <View style={styles.background}>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                                style={{
+                                position: 'absolute',
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                height: 400,
+                                }}
+                            />
                             {user &&
                                 <View>
                                     <Text style={styles.textAlt}>
                                         Hello {user.name}!
                                     </Text>
 
+                                    <View style ={styles.newSessionButton}>
+                                        <TouchableOpacity
+                                                onPress={() => props.navigation.navigate('NewSession')}>
+                                            <Text style={styles.textLeft} >New Session</Text>
+                                        </TouchableOpacity>
+                                    </View>
 
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => props.navigation.navigate('NewSession')}
-                                    >
-                                        <Text style={styles.text} >New Session</Text>
-                                    </TouchableOpacity>
+                                    <Text style={styles.textAlt} >History</Text>                
 
-                                    <Text style={styles.text} >History</Text>
+                                    <FlatList
+                                        data={SessionData}
+                                        renderItem={({item, index})=>
 
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => {
-                                            props.navigation.navigate('SessionDetails',
-                                                {
-                                                    gameType: 'No Limit Hold\'em',
-                                                    location: 'Aria',
-                                                    startTime: '10/15/20  11:00 AM',
-                                                    endTime: '10/15/20  1:00 PM',
-                                                    buyIn: '$100',
-                                                    cashOut: '+ $200'
-                                                });
+                                        
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.button} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <TouchableOpacity
+                                                    style={styles.button}
+                                                    onPress={()=>{
+                                                    props.navigation.navigate('SessionDetails', 
+                                                            {   
+                                                                location: item.location,
+                                                                gameType: item.gameType,
+                                                                stakes: item.stakes,
+                                                                startTime: item.startTime,
+                                                                endTime: item.endTime,
+                                                                buyIn: item.buyIn,
+                                                                cashOut: item.cashOut,
+                                                                profit: item.profit
+                                                            });
+                                                        }
+                                                    }
+                                                >   
+                                                    
+                                                    <View style={styles.row}>
+                                                        <Text style={styles.text} >{item.location}</Text>
+                                                        <Text style={styles.textLeft} >{item.startTime} </Text>
+                                                    </View>
+                                                    
+                                                    <View style={styles.row}>
+                                                        <Text style={styles.text} >{item.gameType}</Text>
+                                                        {displayProfit(item.profit.toString())}
+                                                    </View>
+                                                    
+                                                </TouchableOpacity>
+                                        </LinearGradient>
                                         }
-                                        }
-                                    >
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Aria</Text>
-                                            <Text style={styles.textLeft} >10/5/20</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >No Limit Hold'em</Text>
-                                            <Text style={styles.textLeft} >+ $200</Text>
-                                        </View>
-
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => {
-                                            props.navigation.navigate('SessionDetails',
-                                                {
-                                                    gameType: 'PLO Omaha',
-                                                    location: 'Bellagio',
-                                                    startTime: '9/27/20  11:35 PM',
-                                                    endTime: '9/28/20  1:00 AM',
-                                                    buyIn: '$100',
-                                                    cashOut: '- $150'
-                                                });
-                                        }
-                                        }
-                                    >
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Bellagio</Text>
-                                            <Text style={styles.textLeft} >9/27/20</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >PLO Omaha</Text>
-                                            <Text style={styles.textLeft} >- $150</Text>
-                                        </View>
-
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => {
-                                            props.navigation.navigate('SessionDetails',
-                                                {
-                                                    gameType: 'Limit Hold\'em',
-                                                    location: 'Caesar\'s Palace',
-                                                    startTime: '9/10/20  5:00 PM',
-                                                    endTime: '9/10/20  8:00 PM',
-                                                    buyIn: '$50',
-                                                    cashOut: '+ $67'
-                                                });
-                                        }
-                                        }
-
-                                    >
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Caesar's Palace</Text>
-                                            <Text style={styles.textLeft} >9/10/20</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.text} >Limit Hold'em</Text>
-                                            <Text style={styles.textLeft} >+ $67</Text>
-                                        </View>
-
-                                    </TouchableOpacity>
-
+                                    />                           
                                 </View>
                             }
                         </View>
@@ -191,6 +223,9 @@ export default function HomeScreen(props) {
 
 
 const styles = StyleSheet.create({
+    background: {
+        backgroundColor: "#1A1D51",
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -204,7 +239,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         margin: 20,
     },
@@ -213,22 +248,42 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 20,
     },
+    textGreen: {
+        color: 'green',
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 20,
+    },
+    textRed: {
+        color: 'red',
+        fontWeight: "bold",
+        fontSize: 20,
+        margin: 20,
+    },
     textAlt: {
         fontSize: 24,
         fontWeight: '700',
-        color: 'black',
+        color: 'white',
         flex: 1,
         marginLeft: 10,
         margin: 20
     },
     button: {
-        alignItems: "flex-start",
-        backgroundColor: "#DDDDDD",
-        padding: 10,
+        padding: 0,
         marginHorizontal: 20,
         marginBottom: 20,
         color: "red",
-        margin: 20
+        margin: 20,
+        borderRadius: 40,
+    },
+    newSessionButton: {
+        padding: 0,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        color: "red",
+        margin: 20,
+        borderRadius: 40,
+        backgroundColor: "#62FAE0"
     },
     title: {
         fontSize: 24,

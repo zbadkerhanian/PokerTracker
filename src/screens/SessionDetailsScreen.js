@@ -13,9 +13,37 @@ import { CollapsibleHeaderScrollView } from 'react-native-collapsible-header-vie
 import { Header } from 'react-native-elements';
 import Constants from 'expo-constants';
 import { AuthContext } from '../../context';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { height, width } = Dimensions.get('window');
+
+
+function displayBuyIn(item){
+    if(item >= 0)
+    {
+        return<Text style={styles.textGreenIn}>{'$' + item.toString()}</Text>
+    } else {
+        return<Text style={styles.textRedIn}>{'-$' + ((-1) * item).toString()}</Text>
+    }
+}
+
+function displayBuyOut(item){
+    if(item >= 0)
+    {
+        return<Text style={styles.textGreenOut}>{'$' + item.toString()}</Text>
+    } else {
+        return<Text style={styles.textGreenIn}>{'-$' + ((-1) * item).toString()}</Text>
+    }
+}
+
+function displayProfit(item){
+    if(item >= 0)
+    {
+        return<Text style={styles.textGreenProfit}>{'$' + item.toString()}</Text>
+    } else {
+        return<Text style={styles.textRedProfit}>{'-$' + ((-1) * item).toString()}</Text>
+    }
+}
 
 
 export default function SessionDetailsScreen(props){
@@ -34,21 +62,21 @@ export default function SessionDetailsScreen(props){
                         }}
                         leftComponent={{ 
                             icon: 'chevron-left',
-                            color: '#C2185B', 
-                            underlayColor: '#282828',
+                            color: 'white', 
+                            underlayColor: '#1A1D51',
                             onPress: () => props.navigation.goBack()
                         }}
-                        // centerComponent={{ 
-                        //     text: 'BarHop', 
-                        //     style: { 
-                        //         color: '#C2185B', 
-                        //         fontSize: 25 
-                        //     } 
-                        // }}
+                        centerComponent={{ 
+                            text: 'Session Details', 
+                            style: { 
+                                color: 'white', 
+                                fontSize: 25 
+                            } 
+                        }}
                         containerStyle={{
                             height: 80,
-                            backgroundColor: '#282828',
-                            borderBottomColor:'#282828', 
+                            backgroundColor: '#1A1D51',
+                            borderBottomColor:'#1A1D51', 
                             borderBottomWidth:1 
                         }}
                     
@@ -57,50 +85,106 @@ export default function SessionDetailsScreen(props){
                 headerHeight={80}
                 disableHeaderSnap={true}
             >            
-                <SafeAreaView>
-                    <ScrollView scrollEventThrottle={16}>
-                        <View>
-                            {user && 
-                                <View>
-                                    <Text style={styles.textAlt}>
-                                        Welcome to the Session Details
-                                    </Text>
-                                    
-                                    <View style={styles.container1}>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label} >Game Type</Text>
-                                            <Text style={styles.text}>{props.route.params.gameType}</Text>
-                                        </View>
+                <SafeAreaView style = {styles.container}>
+                    <LinearGradient
+                        colors={['rgba(0,0,0,0.8)', 'transparent']}
+                        style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        height: 400,
+                        }}/>
+                        <ScrollView scrollEventThrottle={16}>
+                            <View>
+                                {user && 
+                                    <View>
+                                        <View style={styles.container1}>
+            
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <Text style={styles.labelLocation} >Location</Text>
+                                                <Text style={styles.textLocation}>{props.route.params.location}</Text>
+                                            </LinearGradient>
+                                       
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <Text style={styles.labelGameType} >Game Type</Text>
+                                                <Text style={styles.textGameType}>{props.route.params.gameType}</Text>
+                                            </LinearGradient>
+                                            
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <Text style={styles.labelStakes} >Stakes</Text>
+                                                <Text style={styles.textStakes}>{props.route.params.stakes}</Text>
+                                            </LinearGradient>
+                                           
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <Text style={styles.labelTime} >Start Time</Text>
+                                                <Text style={styles.textTime} >{props.route.params.startTime}</Text>
+                                            </LinearGradient>
+                                            
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <Text style={styles.labelTime} >End Time</Text>
+                                                <Text style={styles.textTime} >{props.route.params.endTime}</Text>
+                                            </LinearGradient>
 
-                                        <View style={styles.row}>
-                                            <Text style={styles.labelAlt1} >Location</Text>
-                                            <Text style={styles.text}>{props.route.params.location}</Text>
-                                        </View>
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row1} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            >
+                                                <LinearGradient 
+                                                    colors={['#903DFC', '#62FAE0']} 
+                                                    style={styles.row} 
+                                                    start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                                > 
+                                                    <Text style={styles.labelBuyIn} >Buy In</Text>
+                                                    <Text style={styles.labelCashOut} >Cash Out</Text>
+                                                </LinearGradient>
+                                                
+                                                <LinearGradient 
+                                                    colors={['#903DFC', '#62FAE0']} 
+                                                    style={styles.row} 
+                                                    start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                                > 
+                                                    <Text style={styles.textAmountBuyIn} >{displayBuyIn(props.route.params.buyIn)}</Text>
+                                                    <Text style={styles.textAmountCashOut} >{displayBuyOut(props.route.params.cashOut)}</Text>
+                                                </LinearGradient>                     
+                                            </LinearGradient>
 
-                                        <View style={styles.row}>
-                                            <Text style={styles.labelAlt} >Buy In</Text>
-                                            <Text style={styles.labelAlt} >Cash Out</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.textAmount} >{props.route.params.buyIn}</Text>
-                                            <Text style={styles.textAmount} >{props.route.params.cashOut}</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text style={styles.label} >Start Time</Text>
-                                            <Text style={styles.textTime} >{props.route.params.startTime}</Text>
-                                        </View>
-                                        
-                                        <View style={styles.row}>
-                                            <Text style={styles.label} >End Time</Text>
-                                            <Text style={styles.textTime} >{props.route.params.endTime}</Text>
-                                        </View>
-                                    </View>                                 
-                                </View>
-                            }                              
-                        </View>
-                    </ScrollView>
+                                          
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            > 
+                                                <Text style={styles.labelProfit} >Profit</Text>
+                                                <Text style={styles.textProfit} >{displayProfit(props.route.params.profit)}</Text>
+                                            </LinearGradient>
+ 
+                                        </View>                                 
+                                    </View>
+                                }                              
+                            </View>
+                        </ScrollView>
                 </SafeAreaView>
             </CollapsibleHeaderScrollView>
         </View>
@@ -111,87 +195,214 @@ export default function SessionDetailsScreen(props){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems:'center', 
-        justifyContent:'center',
-        height: 500
+        backgroundColor: "#1A1D51"
     },
     container1: {
         flex: 1,
-        backgroundColor: "#DDDDDD",
-        margin: 20
+        margin: 20,
+        borderRadius: 35
     },
     row: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
+        backgroundColor: "red",
+        borderRadius: 30,
+        margin: 15
+    },
+    row1: {
+        flex: 1,
+        justifyContent: "space-between",
+        backgroundColor: "red",
+        borderRadius: 30,
+        margin: 15
     },
     text: {
         flex: 1,
         color: 'black',
         fontSize: 20,
-        margin: 20,
-        textAlign: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 5, 
-        backgroundColor: "darkgray",
-        alignSelf: "flex-start"
-
+        marginTop: 20,
+        marginRight: 5,
+        textAlign: "right"
+    },
+    textLocation: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        marginTop: 25,
+        textAlign: "right",
+        paddingHorizontal: 20
+    },
+    textGameType: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        marginTop: 20,
+        marginBottom: 20,
+        textAlign: "right",
+        paddingHorizontal: 20
     },
     textAlt: {
         fontSize: 24, 
         fontWeight: '700', 
         color: 'black', 
         flex:1, 
-        marginLeft: 10,
-        marginTop: 20,
+        textAlign: "center",
+        marginTop: 20
     },
     textTime: {
         flex: 1,
         color: 'black',
         fontSize: 20,
-        margin: 20,
-        paddingHorizontal: 30,
-        paddingTop: 5,
-        paddingBottom: 5,
+        marginTop: 20,
+        marginLeft: 15,
         textAlign: "center",
-        backgroundColor: "darkgray",
+        alignSelf: "flex-start"
+    },
+    textProfit: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        margin: 2,
+        marginTop: 18,
+        marginRight: 20,
+        textAlign: "right",
+        alignSelf: "flex-start"
+    },
+    textGreenProfit: {
+        flex: 1,
+        color: 'darkgreen',
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 2,
+        marginTop: 18,
+        marginRight: 20,
+        textAlign: "right",
+        alignSelf: "flex-start"
+    },
+    textRedProfit: {
+        flex: 1,
+        color: 'red',
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 2,
+        marginTop: 18,
+        marginRight: 20,
+        textAlign: "right",
         alignSelf: "flex-start"
     },
     textAmount: {
         flex: 1,
         color: 'black',
         fontSize: 20,
-        margin: 25,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 0,
-        marginHorizontal: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 25,
         textAlign: "center",
-        backgroundColor: "darkgray"
+    },
+    textAmountBuyIn: {
+        flex: 1,
+        color: 'white',
+        fontSize: 20,
+        marginRight: 220,
+        textAlign: "center",
+    },
+    textGreenIn: {
+        flex: 1,
+        color: 'darkgreen',
+        fontSize: 20,
+        fontWeight: "bold",
+        marginRight: 220,
+        textAlign: "center",
+    },
+    textRedIn: {
+        flex: 1,
+        color: 'darkred',
+        fontSize: 20,
+        fontWeight: "bold",
+        marginRight: 220,
+        textAlign: "center",
+    },
+    textGreenOut: {
+        flex: 1,
+        color: 'darkgreen',
+        fontSize: 20,
+        fontWeight: "bold",
+        marginRight: 220,
+        textAlign: "center",
+    },
+    textRedOut: {
+        flex: 1,
+        color: 'darkred',
+        fontSize: 20,
+        fontWeight: "bold",
+        marginRight: 220,
+        textAlign: "center",
+    },
+    textAmountCashOut: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        textAlign: "center"
+    },
+    textStakes: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        margin: 20,
+        textAlign: "right",
+        alignSelf: "flex-start"
     },
     label: {
         color: 'black',
         fontSize: 20,
         fontWeight: '600',
-        margin: 20,
-        paddingVertical: 20
-
+        margin:20
     },
     labelAlt: {
         color: 'black',
         fontSize: 20,
         fontWeight: '600',
         margin: 20,
-        paddingVertical: 25
     },
-    labelAlt1: {
-        color: 'black',
+    labelLocation: {
+        color: 'white',
         fontSize: 20,
         fontWeight: '600',
         margin: 20,
         paddingVertical: 5
+    },
+    labelGameType: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        margin:20
+    },
+    labelStakes: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        margin:20
+    },
+    labelTime: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        margin:20
+    },
+    labelBuyIn: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        marginLeft: 5
+    },
+    labelCashOut: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: '600'
+    },
+    labelProfit: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        margin: 20
     },
     title: { 
         fontSize: 24, 

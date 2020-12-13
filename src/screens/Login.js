@@ -14,6 +14,7 @@ import "firebase/auth";
 import { AuthContext } from "./../../context";
 import {Utilities, ScreenDimensions} from '../global_functions/Utilities';
 
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Logo from '../components/Logo';
 
@@ -100,13 +101,24 @@ export default function LoginScreen(props){
 
     return(
       <View style={styles.container1}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'transparent']}
+          style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          height: 400,
+          }}
+      />
         <ScrollView style={{height: ScreenDimensions.height}}>
                 <View style={[{marginTop: 150, flex: 1} ]}>
-                  <Logo/>
                   <View style={styles.container}>
+                    <Logo/>
                     <View style={styles.errorContainer}>
                       {error && <Text style={styles.errorText}>{error}</Text>}
                     </View>
+                    
                     <TextInput style={[styles.inputBox, !emailValidated? styles.error : null]}
                       autoCompleteType='email' 
                       textContentType='emailAddress'
@@ -150,11 +162,11 @@ export default function LoginScreen(props){
 const styles = StyleSheet.create({
   container1:{
     flex: 1,
-    backgroundColor: "#455a64"
+    backgroundColor: "#1A1D51"
   },
   container: {
     flexGrow: 1,
-    backgroundColor: "#455a64",
+    // backgroundColor: "#455a64",
     alignItems: "center",
     justifyContent: "flex-start"
   },
@@ -169,23 +181,24 @@ const styles = StyleSheet.create({
   	fontSize:16
   },
   signupButton: {
-  	color:'#ffffff',
+  	color:'white',
   	fontSize:16,
   	fontWeight:'500'
   },
   inputBox: {
     width:300,
-    backgroundColor:'rgba(255, 255,255,0.3)',
+    backgroundColor:'#903DFC',
     borderRadius: 25,
     paddingHorizontal:16,
     fontSize:16,
-    color:'#ffffff',
+    fontFamily: "normal",
+    color:'white',
     marginVertical: 10,
     paddingVertical: 14
   },
   button: {
     width:300,
-    backgroundColor:'#1c313a',
+    backgroundColor:'#62FAE0',
     borderRadius: 25,
     marginVertical: 10,
     paddingVertical: 13
@@ -193,7 +206,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize:16,
     fontWeight:'500',
-    color:'#ffffff',
+    color:'black',
     textAlign:'center'
   },
   error: {
@@ -203,7 +216,9 @@ const styles = StyleSheet.create({
   errorContainer:{
     alignItems:'center', 
     justifyContent:'center',
-    marginHorizontal:30
+    marginHorizontal:30,
+    fontFamily: "normal"
+    
   },
   errorText:{
     fontSize: 16,
