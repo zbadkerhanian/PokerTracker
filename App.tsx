@@ -13,6 +13,7 @@ import NewSessionScreen from './src/screens/NewSessionScreen'
 import SessionDetailsScreen from './src/screens/SessionDetailsScreen'
 import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
+import SplashScreen from './src/screens/SplashScreen';
 import { AuthContext } from "./context";
 
 
@@ -33,45 +34,45 @@ if (!firebase.apps.length) {
 //firebase.analytics();
 
 export const Loading = () => (
-  <View style={{flex: 1, alignItems:'center', padding: 50}}>
+  <View style={{ flex: 1, alignItems: 'center', padding: 50 }}>
     <ActivityIndicator size="large" color="#C2185B" />
   </View>
 );
 
-export default function App(){
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [user, setUser] = React.useState("dgfd");
+export default function App() {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [user, setUser] = React.useState("");
 
-    React.useEffect(() => {
-      console.log("in useEffect----------------")
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }, []);
+  React.useEffect(() => {
+    console.log("in useEffect----------------")
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
 
-    return(
-      <AuthContext.Provider value = {{user, setUser}}>
-        <StatusBar style="auto" />
-        <NavigationContainer>
-        {isLoading ? <Loading/> 
-          : user ? <Drawer/>
-          : <AuthStack/>
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      <StatusBar style="auto" />
+      <NavigationContainer>
+        {isLoading ? <Loading />
+          : user ? <Drawer />
+            : <AuthStack />
         }
-        </NavigationContainer>
-      </AuthContext.Provider>
-    )  
-    
+      </NavigationContainer>
+    </AuthContext.Provider>
+  )
+
 }
 
 
 const DrawerNav = createDrawerNavigator();
 
 function Drawer() {
-  return(
-    <DrawerNav.Navigator 
-      initialRouteName = "Home"
-      drawerContent={props => <CustomDrawerContent {...props}/>} 
+  return (
+    <DrawerNav.Navigator
+      initialRouteName="Home"
+      drawerContent={props => <CustomDrawerContent {...props} />}
       drawerContentOptions={{
         activeTintColor: '#e91e63',
         inactiveTintColor: 'white',
@@ -82,14 +83,14 @@ function Drawer() {
 }
 
 const CustomDrawerContent = (props: any) => (
-  <DrawerContentScrollView {...props} style={{backgroundColor:'#282828',height:Dimensions.get('window').height}}>
-      <View style={{height: 150, alignItems:'center', justifyContent:'center'}}>
-        <View style={{alignItems:'center', justifyContent:'center', borderRadius:60,height:120,width:120, overflow:"hidden"}}>
-          <Image source={require('./assets/profile-photo.jpg')} style={{ height: 160, width: 160 }}/>
-          {/* <Image source={{ uri: global.photoUrl }} style={{ height: 160, width: 160 }}/> */}
-        </View>
+  <DrawerContentScrollView {...props} style={{ backgroundColor: '#282828', height: Dimensions.get('window').height }}>
+    <View style={{ height: 150, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 60, height: 120, width: 120, overflow: "hidden" }}>
+        <Image source={require('./assets/profile-photo.jpg')} style={{ height: 160, width: 160 }} />
+        {/* <Image source={{ uri: global.photoUrl }} style={{ height: 160, width: 160 }}/> */}
       </View>
-    <DrawerItemList {...props}/>
+    </View>
+    <DrawerItemList {...props} />
   </DrawerContentScrollView>
 )
 
@@ -100,7 +101,7 @@ function HomeStack() {
   return (
     <HomeStackNav.Navigator
       initialRouteName="Home"
-      screenOptions={{        
+      screenOptions={{
         animationEnabled: false,
         headerShown: false
       }}>
@@ -120,6 +121,7 @@ function AuthStack() {
         animationEnabled: false,
         headerShown: false
       }}>
+
       <AuthStackNav.Screen name="Login" component={LoginScreen} />
       <AuthStackNav.Screen name="Signup" component={SignupScreen} />
     </AuthStackNav.Navigator>
