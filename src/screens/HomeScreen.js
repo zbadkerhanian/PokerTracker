@@ -85,8 +85,15 @@ function displayProfit(item){
 }
 
 export default function HomeScreen(props) {
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
+    const [sessionList, setSessionList] = useState(SessionData);
+    console.log("homescreen")
+    console.log(sessionList)
+
     
+    
+    SessionData.sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
+
     SessionData.forEach(getProfitStr)
 
 
@@ -119,12 +126,13 @@ export default function HomeScreen(props) {
                         }
 
                         rightComponent={
-                            <Icon
-                                name='user'
-                                type='font-awesome'
-                                color='white'
-                                underlayColor='#1A1D51'
-                                onPress={() => console.log("do nothing")} />
+                            <TouchableOpacity style={{justifyContent:'center', alignItems:'center'}} onPress={() => {
+                                    
+                                    console.log("sign out")
+                                    setUser()
+                                }}>
+                                <Text style={styles.textHeader}>Sign Out</Text>
+                            </TouchableOpacity>
                         }
 
                         containerStyle={{
@@ -154,17 +162,15 @@ export default function HomeScreen(props) {
                                 }}
                             />
                             {user &&
-                                <View>
+                                <View style={{flex:1,}}>
                                     <Text style={styles.textAlt}>
                                         Hello {user.name}!
                                     </Text>
 
-                                    <View style ={styles.newSessionButton}>
-                                        <TouchableOpacity
-                                                onPress={() => props.navigation.navigate('NewSession')}>
-                                            <Text style={styles.textLeft} >New Session</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                    <TouchableOpacity style={styles.newSessionButton}
+                                            onPress={() => props.navigation.navigate('NewSession')}>
+                                        <Text style={styles.textNewSessionBtn} >New Session</Text>
+                                    </TouchableOpacity>
 
                                     <Text style={styles.textAlt} >History</Text>                
 
@@ -179,7 +185,6 @@ export default function HomeScreen(props) {
                                             start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
                                         >
                                             <TouchableOpacity
-                                                    style={styles.button}
                                                     onPress={()=>{
                                                     props.navigation.navigate('SessionDetails', 
                                                             {   
@@ -198,7 +203,7 @@ export default function HomeScreen(props) {
                                                     
                                                     <View style={styles.row}>
                                                         <Text style={styles.text} >{item.location}</Text>
-                                                        <Text style={styles.textLeft} >{item.startTime} </Text>
+                                                        <Text style={styles.textRight} >{item.startTime} </Text>
                                                     </View>
                                                     
                                                     <View style={styles.row}>
@@ -224,29 +229,30 @@ export default function HomeScreen(props) {
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: "#1A1D51",
-    },
-    container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 500
+        backgroundColor: "#1A1D51",
     },
     row: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    textHeader: {
+        color: 'white',
+        fontSize: 15,
+    },
     text: {
         flex: 1,
         color: 'white',
         fontSize: 20,
-        margin: 20,
+        marginLeft: 20,
+        marginVertical: 20,
     },
-    textLeft: {
+    textRight: {
         color: 'black',
         fontSize: 20,
-        margin: 20,
+        marginRight: 20,
+        marginVertical: 20,
     },
     textGreen: {
         color: 'green',
@@ -268,6 +274,11 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         margin: 20
     },
+    textNewSessionBtn: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+    },
     button: {
         padding: 0,
         marginHorizontal: 20,
@@ -277,13 +288,16 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     newSessionButton: {
-        padding: 0,
+        flex: 1,
+        padding: 20,
         marginHorizontal: 20,
         marginBottom: 20,
         color: "red",
         margin: 20,
         borderRadius: 40,
-        backgroundColor: "#62FAE0"
+        backgroundColor: "#62FAE0",
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     title: {
         fontSize: 24,
