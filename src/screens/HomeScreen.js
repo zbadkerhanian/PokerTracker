@@ -18,6 +18,8 @@ import { AuthContext } from '../../context';
 import { Loading } from '../../App'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
+import {Picker} from '@react-native-picker/picker';
+
 
 
 const { height, width } = Dimensions.get('window');
@@ -89,13 +91,27 @@ function displayProfit(item){
 
 export default function HomeScreen(props) {
     const { user, setUser, sessionList, setSessionList } = useContext(AuthContext);
-    setSessionList(SessionData)
+    const [dropdownValue, setDropdownValue] = useState("Descending Date");
 
-    
-    
-    SessionData.sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
 
-    SessionData.forEach(getProfitStr)
+    if(!sessionList)
+        setSessionList(SessionData)
+    let tempList = sessionList
+
+    if(dropdownValue == "Descending Date"){
+        tempList.sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
+    }
+    else if(dropdownValue == "Ascending Date"){
+        tempList.sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+    }
+    else if(dropdownValue == "Descending Profit"){
+        tempList.sort((a, b) => b.profit - a.profit)
+    }
+    else if(dropdownValue == "Ascending Profit"){
+        tempList.sort((a, b) => a.profit - b.profit)
+    }
+    tempList.forEach(getProfitStr) //add '$' to the correct position in profit string
+    setSessionList(tempList)
 
 
     return (
@@ -172,11 +188,29 @@ export default function HomeScreen(props) {
                                             onPress={() => props.navigation.navigate('NewSession')}>
                                         <Text style={styles.textNewSessionBtn} >New Session</Text>
                                     </TouchableOpacity>
-
-                                    <Text style={styles.textAlt} >History</Text>                
-
+                                    
+                                    <View style={{flex: 1, flexDirection: 'row'}}>
+                                        <Text style={styles.textAlt} >History</Text>  
+                                        <View style={{flex: 1, marginVertical:12}}> 
+                                            <View 
+                                                style={styles.dropdown}
+                                                >             
+                                                <Picker
+                                                        selectedValue={dropdownValue}
+                                                        //style={styles.picker}
+                                                        mode={"dropdown"}
+                                                        onValueChange={(itemValue, itemIndex) => setDropdownValue(itemValue)}
+                                                    >
+                                                        <Picker.Item label="Descending Date" value="Descending Date" />
+                                                        <Picker.Item label="Ascending Date" value= "Ascending Date" />
+                                                        <Picker.Item label="Descending Profit" value= "Descending Profit" />
+                                                        <Picker.Item label="Ascending Profit" value= "Ascending Profit" />
+                                                </Picker>
+                                            </View>
+                                        </View>
+                                    </View>
                                     <FlatList
-                                        data={SessionData}
+                                        data={sessionList}
                                         renderItem={({item, index})=>
 
                                         
@@ -232,6 +266,11 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         backgroundColor: "#1A1D51",
+    },
+    dropdown: {
+        flex: 1,
+        backgroundColor: "#DDDBF5",
+        borderRadius: 10,
     },
     row: {
         flex: 1,
