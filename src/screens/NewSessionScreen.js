@@ -16,7 +16,8 @@ import {
     Button,
     FlatList,
     SectionList,
-    TextInput
+    TextInput,
+    Alert
 } from 'react-native';
 import { CollapsibleHeaderScrollView } from 'react-native-collapsible-header-views';
 import { Header } from 'react-native-elements';
@@ -101,7 +102,67 @@ export default function NewSessionScreen(props) {
     const [selectedGameValue, setSelectedGameValue] = useState("NL Texas Hold'em");
     const [stake1, setStake1] = useState('');
     const [stake2, setStake2] = useState('');
-    let [session, setSession] = useState(SessionData);
+    const [session, setSession] = useState(SessionData);
+
+    var errors=[];
+
+    function handleCreateNewSession(){
+
+        session.push({
+            location: location,
+            startTime: formattedStartDate + "  " + formattedStartTime,
+            endTime: formattedEndDate + "  " + formattedEndTime,
+            gameType: selectedGameValue,
+            stakes: stake1 + "/" + stake2,
+            buyIn: buy,
+            cashOut: cash,
+            profit: cash - buy
+        });
+        props.navigation.navigate('Home', {   
+            location: location,
+            startTime: input,
+            endTime: input2,
+            gameType: selectedGameValue,
+            stakes: stake1 + "/" + stake2,
+            buyIn: buy,
+            cashOut: cash,
+            profit: cash - buy
+        });
+      }
+    
+
+    function submit(){
+        let ready = true;
+        if(location.length == 0){
+          ready = false;
+          errors.push("Location cannot be empty.")
+        }
+        if(stake1.length == 0 || stake2.length == 0){
+            ready = false;
+            errors.push("Stakes cannot be empty.")
+        }
+        if(buy.length == 0)
+        {
+            ready = false;
+            errors.push("Buy In cannot be empty.")
+        }
+        if(cash.length == 0)
+        {
+            ready = false;
+            errors.push("Cash Out cannot be empty")
+        }
+        displayErrors();
+        if(ready)
+        {
+            handleCreateNewSession();
+        }
+    }
+    
+      function displayErrors(){
+        if(errors.length != 0)
+          Alert.alert('', errors.join('\n'));
+        errors=[];
+      }
 
     return (
         <View style={s.global}>
@@ -308,26 +369,7 @@ export default function NewSessionScreen(props) {
 
                             <View style ={styles.newSessionButton}>
                                         <TouchableOpacity
-                                                onPress={()=>{ session.push({
-                                                        location: location,
-                                                        startTime: formattedStartDate + "  " + formattedStartTime,
-                                                        endTime: formattedEndDate + "  " + formattedEndTime,
-                                                        gameType: selectedGameValue,
-                                                        stakes: stake1 + "/" + stake2,
-                                                        buyIn: buy,
-                                                        cashOut: cash,
-                                                        profit: cash - buy
-                                                    });
-                                                    props.navigation.navigate('Home', {   
-                                                        location: location,
-                                                        startTime: input,
-                                                        endTime: input2,
-                                                        gameType: selectedGameValue,
-                                                        stakes: stake1 + "/" + stake2,
-                                                        buyIn: buy,
-                                                        cashOut: cash,
-                                                        profit: cash - buy
-                                                    }); 
+                                                onPress={()=>{ submit(); 
                                                 }
                                                 }
                                             >
@@ -628,5 +670,21 @@ const loginStyles = StyleSheet.create({
         fontSize: 20,
         margin: 5
 
-    }
+    },
+    error: {
+        borderWidth:3,
+        borderColor: 'red'
+      },
+      errorContainer:{
+        alignItems:'center', 
+        justifyContent:'center',
+        marginHorizontal:30,
+        fontFamily: "normal"
+        
+      },
+      errorText:{
+        fontSize: 16,
+        color: 'red',
+        textAlign: 'center'
+      }
 });
