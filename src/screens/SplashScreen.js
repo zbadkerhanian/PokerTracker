@@ -13,7 +13,7 @@ const Splash = ({
 
     return (
         <View color={['64B6FF']}>
-            <Image source={require('../../assets/splash.png')} resizeMode="cover" style={{
+            <Image source={require('../../assets/splash1.png')} resizeMode="cover" style={{
                 flex: 1
             }} />
         </View>

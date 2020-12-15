@@ -25,7 +25,6 @@ import { AuthContext } from '../../context';
 import { TouchableOpacityComponent } from 'react-native';
 import { setTextRange } from 'typescript';
 import { format } from "date-fns";
-import { SessionData } from '../../src/screens/HomeScreen';
 
 //import { Dropdown } from 'react-native-material-dropdown';
 
@@ -35,25 +34,6 @@ import {Picker} from '@react-native-picker/picker';
 
 
 const { height, width } = Dimensions.get('window');
-
-/*class Data extends Component {
-    render() {
-        let data = [{
-            value: 'Teaxs Hold-em',
-        }, {
-            value: 'Poker',
-        }, {
-            value: 'PLO Omaha',
-        }];
-
-
-    }
-}*/
-const DATA = [
-    {
-        data: ['Hold-em', 'Poker', 'PLO Omaha']
-    }
-];
 
 function useInput() {
     const [date, setDate] = useState(new Date());
@@ -87,8 +67,7 @@ function useInput() {
 }
 
 export default function NewSessionScreen(props) {
-    const { user } = useContext(AuthContext);
-    const { sessionList, setSessionList } = useContext(AuthContext);
+    const { user, sessionList, setSessionList } = useContext(AuthContext);
 
     const [buy, setBuy] = useState('');
     const [cash, setCash] = useState('');
@@ -356,36 +335,21 @@ export default function NewSessionScreen(props) {
                             <View style ={styles.newSessionButton}>
                                         <TouchableOpacity
                                                 onPress={()=>{ 
-                                                    console.log("NewSessionList")
-                                                    console.log(sessionList)
-                                                    // let tempList = sessionList
-                                                    // tempList.push({
-                                                    //     location: location,
-                                                    //     startTime: formattedStartDate + "  " + formattedStartTime,
-                                                    //     endTime: formattedEndDate + "  " + formattedEndTime,
-                                                    //     gameType: selectedGameValue,
-                                                    //     stakes: stake1 + "/" + stake2,
-                                                    //     buyIn: buy,
-                                                    //     cashOut: cash,
-                                                    //     profit: cash - buy
-                                                    // })
-                                                    // setSessionList(tempList);
-                                                    
-                                                    props.navigation.navigate('Home'
-                                                    // , 
-                                                    // {   
-                                                    //     location: location,
-                                                    //     startTime: input,
-                                                    //     endTime: input2,
-                                                    //     gameType: selectedGameValue,
-                                                    //     stakes: stake1 + "/" + stake2,
-                                                    //     buyIn: buy,
-                                                    //     cashOut: cash,
-                                                    //     profit: cash - buy
-                                                    // }
-                                                    ); 
-                                                }
-                                                }
+                                                    let tempList = sessionList
+                                                    tempList.push({
+                                                        location: location,
+                                                        startTime: formattedStartDate + "  " + formattedStartTime,
+                                                        endTime: formattedEndDate + "  " + formattedEndTime,
+                                                        gameType: selectedGameValue,
+                                                        stakes: stake1 + "/" + stake2,
+                                                        buyIn: buy,
+                                                        cashOut: cash,
+                                                        profit: cash - buy
+                                                    })
+                                                    setSessionList(tempList);
+
+                                                    props.navigation.navigate('Home', {test: null}); 
+                                                }}
                                             >
                                             <Text style={styles.saveText} >Save Session</Text>
                                         </TouchableOpacity>

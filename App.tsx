@@ -41,7 +41,8 @@ export const Loading = () => (
 
 export default function App() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [user, setUser] = React.useState("");
+  const [user, setUser] = React.useState("asdf");
+  const [sessionList, setSessionList] = React.useState();
 
   React.useEffect(() => {
     console.log("in useEffect----------------")
@@ -52,7 +53,7 @@ export default function App() {
 
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, sessionList, setSessionList }}>
       <StatusBar style="auto" />
       <NavigationContainer>
         {isLoading ? <Loading />

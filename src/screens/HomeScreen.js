@@ -85,10 +85,8 @@ function displayProfit(item){
 }
 
 export default function HomeScreen(props) {
-    const { user, setUser } = useContext(AuthContext);
-    const [sessionList, setSessionList] = useState(SessionData);
-    console.log("homescreen")
-    console.log(sessionList)
+    const { user, setUser, sessionList, setSessionList } = useContext(AuthContext);
+    setSessionList(SessionData)
 
     
     

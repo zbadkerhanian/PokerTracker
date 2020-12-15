@@ -99,89 +99,85 @@ export default function SessionDetailsScreen(props){
                             <View>
                                 {user && 
                                     <View>
-                                        <View style={styles.container1}>
-            
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <Text style={styles.labelLocation} >Location</Text>
-                                                <Text style={styles.textLocation}>{props.route.params.location}</Text>
-                                            </LinearGradient>
-                                       
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <Text style={styles.labelGameType} >Game Type</Text>
-                                                <Text style={styles.textGameType}>{props.route.params.gameType}</Text>
-                                            </LinearGradient>
-                                            
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <Text style={styles.labelStakes} >Stakes</Text>
-                                                <Text style={styles.textStakes}>{props.route.params.stakes}</Text>
-                                            </LinearGradient>
-                                           
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <Text style={styles.labelTime} >Start Time</Text>
-                                                <Text style={styles.textTime} >{props.route.params.startTime}</Text>
-                                            </LinearGradient>
-                                            
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <Text style={styles.labelTime} >End Time</Text>
-                                                <Text style={styles.textTime} >{props.route.params.endTime}</Text>
-                                            </LinearGradient>
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <Text style={styles.labelLocation} >Location</Text>
+                                            <Text style={styles.textLocation}>{props.route.params.location}</Text>
+                                        </LinearGradient>
+                                    
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <Text style={styles.labelGameType} >Game Type</Text>
+                                            <Text style={styles.textGameType}>{props.route.params.gameType}</Text>
+                                        </LinearGradient>
+                                        
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <Text style={styles.labelStakes} >Stakes</Text>
+                                            <Text style={styles.textStakes}>{props.route.params.stakes}</Text>
+                                        </LinearGradient>
+                                        
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <Text style={styles.labelTime} >Start Time</Text>
+                                            <Text style={styles.textTime} >{props.route.params.startTime}</Text>
+                                        </LinearGradient>
+                                        
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
+                                            <Text style={styles.labelTime} >End Time</Text>
+                                            <Text style={styles.textTime} >{props.route.params.endTime}</Text>
+                                        </LinearGradient>
 
-                                            <LinearGradient 
-                                                colors={['#903DFC', '#62FAE0']} 
-                                                style={styles.row1} 
-                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                            >
-                                                <LinearGradient 
-                                                    colors={['#903DFC', '#62FAE0']} 
-                                                    style={styles.row} 
-                                                    start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                                > 
-                                                    <Text style={styles.labelBuyIn} >Buy In</Text>
-                                                    <Text style={styles.labelCashOut} >Cash Out</Text>
-                                                </LinearGradient>
-                                                
-                                                <LinearGradient 
-                                                    colors={['#903DFC', '#62FAE0']} 
-                                                    style={styles.row} 
-                                                    start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
-                                                > 
-                                                    <Text style={styles.textAmountBuyIn} >{displayBuyIn(props.route.params.buyIn)}</Text>
-                                                    <Text style={styles.textAmountCashOut} >{displayBuyOut(props.route.params.cashOut)}</Text>
-                                                </LinearGradient>                     
-                                            </LinearGradient>
-
-                                          
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row1} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        >
                                             <LinearGradient 
                                                 colors={['#903DFC', '#62FAE0']} 
                                                 style={styles.row} 
                                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
                                             > 
-                                                <Text style={styles.labelProfit} >Profit</Text>
-                                                <Text style={styles.textProfit} >{displayProfit(props.route.params.profit)}</Text>
+                                                <Text style={styles.labelBuyIn} >Buy In</Text>
+                                                <Text style={styles.labelCashOut} >Cash Out</Text>
                                             </LinearGradient>
- 
-                                        </View>                                 
-                                    </View>
+                                            
+                                            <LinearGradient 
+                                                colors={['#903DFC', '#62FAE0']} 
+                                                style={styles.row} 
+                                                start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                            > 
+                                                <Text style={styles.textAmountBuyIn} >{displayBuyIn(props.route.params.buyIn)}</Text>
+                                                <Text style={styles.textAmountCashOut} >{displayBuyOut(props.route.params.cashOut)}</Text>
+                                            </LinearGradient>                     
+                                        </LinearGradient>
+
+                                        
+                                        <LinearGradient 
+                                            colors={['#903DFC', '#62FAE0']} 
+                                            style={styles.row} 
+                                            start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}
+                                        > 
+                                            <Text style={styles.labelProfit} >Profit</Text>
+                                            <Text style={styles.textProfit} >{displayProfit(props.route.params.profit)}</Text>
+                                        </LinearGradient>
+                                     </View>
                                 }                              
                             </View>
                         </ScrollView>
@@ -197,25 +193,20 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#1A1D51"
     },
-    container1: {
-        flex: 1,
-        margin: 20,
-        borderRadius: 35
-    },
     row: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
         backgroundColor: "red",
         borderRadius: 30,
-        margin: 15
+        margin: 20
     },
     row1: {
         flex: 1,
         justifyContent: "space-between",
         backgroundColor: "red",
         borderRadius: 30,
-        margin: 15
+        margin: 20
     },
     text: {
         flex: 1,
@@ -394,7 +385,7 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
     labelCashOut: {
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         fontWeight: '600'
     },
