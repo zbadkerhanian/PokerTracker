@@ -26,7 +26,6 @@ import { AuthContext } from '../../context';
 import { TouchableOpacityComponent } from 'react-native';
 import { setTextRange } from 'typescript';
 import { format } from "date-fns";
-import { SessionData } from '../../src/screens/HomeScreen';
 
 //import { Dropdown } from 'react-native-material-dropdown';
 
@@ -36,25 +35,6 @@ import {Picker} from '@react-native-picker/picker';
 
 
 const { height, width } = Dimensions.get('window');
-
-/*class Data extends Component {
-    render() {
-        let data = [{
-            value: 'Teaxs Hold-em',
-        }, {
-            value: 'Poker',
-        }, {
-            value: 'PLO Omaha',
-        }];
-
-
-    }
-}*/
-const DATA = [
-    {
-        data: ['Hold-em', 'Poker', 'PLO Omaha']
-    }
-];
 
 function useInput() {
     const [date, setDate] = useState(new Date());
@@ -88,7 +68,8 @@ function useInput() {
 }
 
 export default function NewSessionScreen(props) {
-    const { user } = useContext(AuthContext);
+    const { user, sessionList, setSessionList } = useContext(AuthContext);
+
     const [buy, setBuy] = useState('');
     const [cash, setCash] = useState('');
     let cashText;
@@ -102,13 +83,14 @@ export default function NewSessionScreen(props) {
     const [selectedGameValue, setSelectedGameValue] = useState("NL Texas Hold'em");
     const [stake1, setStake1] = useState('');
     const [stake2, setStake2] = useState('');
-    const [session, setSession] = useState(SessionData);
+    // const [session, setSession] = useState(SessionData);
 
     var errors=[];
 
     function handleCreateNewSession(){
 
-        session.push({
+        let tempList = sessionList
+        tempList.push({
             location: location,
             startTime: formattedStartDate + "  " + formattedStartTime,
             endTime: formattedEndDate + "  " + formattedEndTime,
@@ -117,17 +99,10 @@ export default function NewSessionScreen(props) {
             buyIn: buy,
             cashOut: cash,
             profit: cash - buy
-        });
-        props.navigation.navigate('Home', {   
-            location: location,
-            startTime: input,
-            endTime: input2,
-            gameType: selectedGameValue,
-            stakes: stake1 + "/" + stake2,
-            buyIn: buy,
-            cashOut: cash,
-            profit: cash - buy
-        });
+        })
+        setSessionList(tempList);
+
+        props.navigation.navigate('Home', {test: null}); 
       }
     
 
@@ -149,7 +124,7 @@ export default function NewSessionScreen(props) {
         if(cash.length == 0)
         {
             ready = false;
-            errors.push("Cash Out cannot be empty")
+            errors.push("Cash Out cannot be empty.")
         }
         displayErrors();
         if(ready)
@@ -222,73 +197,106 @@ export default function NewSessionScreen(props) {
                                     
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
-                                style={styles.dropDownPicker} 
+                                style={styles.row} 
                                 start={{ y: 0.0, x: 0.2 }} end={{ y: 0.0, x: 1 }}>
                                 
-                                <Text style={styles.labelGame} >Game Type</Text>
-                                <Picker
-                                    selectedValue={selectedGameValue}
-                                    style={styles.picker}
-                                    mode={"dropdown"}
-                                    onValueChange={(itemValue, itemIndex) => setSelectedGameValue(itemValue)}
-                                >
-                                    <Picker.Item label="NL Texas Hold'em" value= "NL Texas Hold'em" />
-                                    <Picker.Item label="Limit Texas Hold'em" value="Limit Texas Hold'em" />
-                                    <Picker.Item label= "Pot Limit Omaha" value= "Pot Limit Omaha" />
-                                    <Picker.Item label="Seven Card Stud" value="Seven Card Stud"/>
-                                    <Picker.Item label= "Three Card Poker" value="Three Card Poker"/>
-                                </Picker>
+                                <View style={{flex:1}}>
+                                    <Text style={styles.labelGame} >Game Type</Text>
+                                </View>
+
+                                <View style={{flex:1}}>
+                                    <View 
+                                    style={styles.dropdown}
+                                    >
+                                        <Picker
+                                            selectedValue={selectedGameValue}
+                                            style={styles.picker}
+                                            mode={"dropdown"}
+                                            onValueChange={(itemValue, itemIndex) => setSelectedGameValue(itemValue)}
+                                        >
+                                            <Picker.Item label="NL Texas Hold'em" value= "NL Texas Hold'em" />
+                                            <Picker.Item label="Limit Texas Hold'em" value="Limit Texas Hold'em" />
+                                            <Picker.Item label= "Pot Limit Omaha" value= "Pot Limit Omaha" />
+                                            <Picker.Item label="Seven Card Stud" value="Seven Card Stud"/>
+                                            <Picker.Item label= "Three Card Poker" value="Three Card Poker"/>
+                                        </Picker>
+                                    </View>
+                                </View>
+
                             </LinearGradient>
 
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
-                                    <Text style={styles.labelStakes} >Location</Text>
-                                    <TextInput id = "1" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.locationInput]}maxLength={1100} keyboardType="decimal-pad"
+                                <View style={{flex: 1}}>
+                                    <Text style={styles.labelStakes}>Location</Text>
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <TextInput id = "1" style={styles.inputBoxLocation} maxLength={1100}
                                         onChangeText={(input) => setLocation(input)} />
+                                </View>
                             </LinearGradient>
 
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
-                                    <Text style={styles.labelStakes} >Stakes</Text>
-                                    <TextInput id = "1" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.locationInput]}maxLength={1100} keyboardType="decimal-pad"
+                                <View style={{flex: 1}}>
+                                    <Text style={styles.labelStakes}>Stakes</Text>
+                                </View>
+                                <View style={{flex: 1, flexDirection:'row'}}>
+                                    <TextInput id = "1" style={styles.inputBoxStake}maxLength={4} keyboardType="decimal-pad"
                                         onChangeText={(input) => setStake1(input)} />
-                                    <Text style={styles.text2}> / </Text>
-                                    <TextInput id = "3" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.stakesInput2]} maxLength={4} keyboardType="decimal-pad"
+                                    <Text style={styles.text1}> / </Text>
+                                    <TextInput id = "3" style={styles.inputBoxStake} maxLength={4} keyboardType="decimal-pad"
                                         onChangeText={(input) => setStake2(input)} />
+                                </View>
                             </LinearGradient>
 
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
-                                    <Text style={styles.label} >Buy In</Text>
-                                    <Text style={styles.text2}>$</Text>
-                                    <TextInput id = "4" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text]}keyboardType="decimal-pad"
-                                        onChangeText={input => setBuy(input)} />
-                                        
-                                    <Text style={styles.label1} >Cash Out</Text>
-                                    <Text style={styles.text2}>$</Text>
-                                    <TextInput id = "5" style={[{flex: 1,justifyContent: 'center', alignItems: 'center'},styles.text1]}keyboardType="decimal-pad"
-                                        onChangeText={input => setCash(input)}/>
+                                <View style={{flex: 1}}>
+                                    <Text style={styles.label}>Buy In</Text>
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <View style={styles.inputBoxBuyIn}>
+                                        <Text style={styles.text2}>$</Text>
+                                        <TextInput  id = "4" style={styles.inputBoxCashOut} maxLength={6} keyboardType="decimal-pad"
+                                            onChangeText={input => setBuy(input)} />    
+                                    </View>
+                                </View> 
+                                <View style={{flex: 1,left:10}}>
+
+                                    <Text style={styles.label} >Cash Out</Text>
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <View style={styles.inputBoxBuyIn}>
+                                        <Text style={styles.text2}>$</Text>
+                                        <TextInput id = "5" style={styles.inputBoxCashOut} maxLength={6} keyboardType="decimal-pad"
+                                            onChangeText={input => setCash(input)}/>
+                                    </View>
+                                </View>
                             </LinearGradient>
                             
                             <LinearGradient 
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
-                                    <Text style={styles.label} >Start Date/Time</Text>
-                                    
-                                    <TouchableOpacity
-                                        style = {styles.dateButton}
-                                        onPress={input.showDatepicker}
-                                    >
-                                        <Text style={styles.textBox}>{formattedStartDate}</Text>
-                                    </TouchableOpacity>
-
+                                <View style={{flex:1}}>
+                                    <Text style={styles.label} >Start{'\n'}Date/Time</Text>
+                                </View>
+                                <View style={{flex:1,flexDirection:'row',}}>
+                                    <View style={{flex:1, paddingHorizontal:5,}}>
+                                        <TouchableOpacity
+                                            style = {styles.dateButton}
+                                            onPress={input.showDatepicker}
+                                        >
+                                            <Text style={styles.textBox}>{formattedStartDate}</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                     <View>
                                         {input.show && (
                                             <DateTimePicker
@@ -301,13 +309,17 @@ export default function NewSessionScreen(props) {
                                             />
                                         )}
                                     </View>
-
-                                    <TouchableOpacity
-                                        style = {styles.dateButton}
-                                        onPress={input.showTimepicker}
-                                    >
-                                        <Text style={styles.textBox}>{formattedStartTime}</Text>
-                                    </TouchableOpacity>
+                                        
+                                </View>
+                                <View style={{flex:1,flexDirection:'row',}}>
+                                    <View style={{flex:1, paddingLeft:5}}>
+                                        <TouchableOpacity
+                                            style = {styles.dateButton}
+                                            onPress={input.showTimepicker}
+                                        >
+                                            <Text style={styles.textBox}>{formattedStartTime}</Text>
+                                        </TouchableOpacity>
+                                    </View>
 
                                     <View>
                                         {input.show && (
@@ -321,6 +333,7 @@ export default function NewSessionScreen(props) {
                                             />
                                         )}
                                     </View>
+                                </View>
                             </LinearGradient>
 
                                     
@@ -328,36 +341,22 @@ export default function NewSessionScreen(props) {
                                 colors={['#903DFC', '#62FAE0']} 
                                 style={styles.row} 
                                 start={{ y: 0.0, x: 0. }} end={{ y: 0.0, x: 1.0 }}>
-                                    <Text style={styles.label} >End Date/Time</Text>
+                                <View style={{flex:1}}>
+                                    <Text style={styles.label} >End{'\n'}Date/Time</Text>
+                                </View>
+                                <View style={{flex:1,flexDirection:'row',}}>
+                                    <View style={{flex:1, paddingHorizontal:5,}}>
                                     
-                                    <TouchableOpacity
-                                        style = {styles.dateButton}
-                                        onPress={input2.showDatepicker}
-                                    >
-                                        <Text style={styles.textBox}>{formattedEndDate}</Text>
-                                    </TouchableOpacity>
-                                    
-                                    {input2.show && (
-                                        <DateTimePicker
-                                            testID="endDatePicker"
-                                            value={input2.date}
-                                            mode={input2.mode}
-                                            is24Hour={false}
-                                            display="spinner"
-                                            onChange={input2.onChange}
-                                        />
-                                    )}
-                                    
-
-                                    <TouchableOpacity
-                                        style = {styles.dateButton}
-                                        onPress={input2.showTimepicker}
-                                    >
-                                        <Text style={styles.textBox}>{formattedEndTime}</Text>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style = {styles.dateButton}
+                                            onPress={input2.showDatepicker}
+                                        >
+                                            <Text style={styles.textBox}>{formattedEndDate}</Text>
+                                        </TouchableOpacity>
+                                        
                                         {input2.show && (
                                             <DateTimePicker
-                                                testID="endTimePicker"
+                                                testID="endDatePicker"
                                                 value={input2.date}
                                                 mode={input2.mode}
                                                 is24Hour={false}
@@ -365,13 +364,34 @@ export default function NewSessionScreen(props) {
                                                 onChange={input2.onChange}
                                             />
                                         )}
+                                    </View>
+                                </View>
+                                <View style={{flex:1,flexDirection:'row',}}>
+                                    <View style={{flex:1, paddingLeft:5}}>
+                                        <TouchableOpacity
+                                            style = {styles.dateButton}
+                                            onPress={input2.showTimepicker}
+                                        >
+                                            <Text style={styles.textBox}>{formattedEndTime}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {input2.show && (
+                                        <DateTimePicker
+                                            testID="endTimePicker"
+                                            value={input2.date}
+                                            mode={input2.mode}
+                                            is24Hour={false}
+                                            display="spinner"
+                                            onChange={input2.onChange}
+                                        />
+                                    )}
+                                </View>
                             </LinearGradient>
 
                             <View style ={styles.newSessionButton}>
                                         <TouchableOpacity
                                                 onPress={()=>{ submit(); 
-                                                }
-                                                }
+                                                }}
                                             >
                                             <Text style={styles.saveText} >Save Session</Text>
                                         </TouchableOpacity>
@@ -396,75 +416,67 @@ const styles = StyleSheet.create({
         backgroundColor: "#1A1D51"
     },
     row: {
+        flex:1,
         flexDirection: "row",
         backgroundColor: '#dddddd',
         marginTop: 40,
         alignItems: 'center',
         height: 95,
-        padding: 0,
-        marginHorizontal: 30,
+        padding: 20,
+        marginHorizontal: 20,
         borderRadius: 30,
     },
-    text: {
+    inputBoxBuyIn: {
+        flexDirection:"row",
+        height: 40,
         color: 'black',
         fontSize: 20,
         textAlign: 'center',
         textAlignVertical: 'center',
         backgroundColor: '#DDDBF5',
-        height: 40,
-        borderRadius: 10
+        borderRadius: 10,
+    },
+    inputBoxCashOut: {
+        flex: 1,
+        borderRadius: 10,
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        backgroundColor: '#DDDBF5',
     },
     text1: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 25,
         textAlign: 'center',
         textAlignVertical: 'center',
-        backgroundColor: '#DDDBF5',
-        height: 40,
-        borderRadius: 10,
-        marginRight: 20
     },
     text2: {
         color: 'black',
         fontSize: 20,
         textAlign: 'center',
         textAlignVertical: 'center',
-        marginLeft: 0,
-        marginRight: 10
-
+        marginLeft: 2,
     },
-    locationInput: {
+    inputBoxLocation: {
         backgroundColor: "#DDDBF5",
         height: 40,
-        width: 10,
-        marginRight: 20,
         fontSize: 20,
         borderRadius: 10,
         color: 'black',
         textAlign: 'center',
         textAlignVertical: 'center',
     },
-    stakesInput1: {
+    dropdown: {
         backgroundColor: "#DDDBF5",
-        height: 40,
-        width: 10,
-        marginRight: 10,
-        fontSize: 20,
-        marginLeft: 60,
         borderRadius: 10,
-        color: 'black',
-        textAlign: 'center',
-        textAlignVertical: 'center',
     },
-    stakesInput2: {
-        alignItems: 'center', 
-        backgroundColor: "#DDDBF5",
+    inputBoxStake: {
+        flex: 1,
         height: 40,
-        width: 50,
-        marginRight: 20,
-        marginLeft: 0,
-        borderRadius: 10,
+        backgroundColor: "#DDDBF5",
         fontSize: 20,
+        borderRadius: 10,
         color: 'black',
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -513,32 +525,20 @@ const styles = StyleSheet.create({
         backgroundColor: "darkgray"
     },
     label: {
-        flex:1,
         color: 'white',
         fontSize: 20,
         fontWeight: '600',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        marginLeft: 20,
     },
     labelStakes: {
-        flex:1,
         color: 'white',
         fontSize: 20,
         fontWeight: '600',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        marginLeft: 20,
-        paddingRight: 0 
     },
-    label1: {
-        flex:1,
-        color: 'black',
+    labelGame: {
+        width: 110,
+        color: 'white',
         fontSize: 20,
         fontWeight: '600',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        marginLeft: 20
     },
     labelAlt: {
         color: 'white',
@@ -555,16 +555,6 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingVertical: 0
     },
-    labelGame: {
-        flex: 1,
-        color: 'white',
-        fontSize: 20,
-        fontWeight: '600',
-        justifyContent: 'center', 
-        alignItems: 'center',
-        margin: 20,
-        marginTop: 30
-    },
     title: {
         fontSize: 24,
         fontWeight: '700',
@@ -579,44 +569,13 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         overflow: "hidden"
     },
-    dropDown: {
-        flex: 1,
-        height: 40,
-        width: 170,
-        justifyContent: 'center', 
-        alignItems: 'flex-start',
-        margin: 20
-    },
     dateButton: {
         height: 50,
-        marginTop: 2,
-        marginRight: 10,
         backgroundColor: "#DDDBF5",
         borderRadius: 10
     },
     picker: {
-        height: 50, 
-        width: 208,
-        marginTop: 20,
-        color: "black"
-    },
-    dropDownPicker:{
-        flexDirection: "row",
-        backgroundColor: '#dddddd',
-        marginTop: 50,
-        height: 95,
-        padding: 0,
-        marginHorizontal: 30,
-        borderRadius: 30,
-    },
-    stakePicker: {
-        height: 50, 
-        width: 100,
-        marginTop: 20,
-        color: "black"
-    },
-    stakesPickerText: {
-        fontSize: 12
+        color: "black",
     },
     newSessionButton: {
         flex: 1,
